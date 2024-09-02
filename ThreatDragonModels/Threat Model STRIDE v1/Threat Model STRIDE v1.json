@@ -1,0 +1,34 @@
+{
+  "version": "2.2.0",
+  "summary": {
+    "title": "Threat Model STRIDE v1",
+    "owner": "Hotel Bosque Encantado ",
+    "description": "Sistema/Diagrama del proyecto enfocado a plataforma web para manejar las reservas de un hotel en una base de datos y también almacenar los datos de los clientes para poder enviarles promociones ",
+    "id": 0
+  },
+  "detail": {
+    "contributors": [
+      {
+        "name": "Victor Telles"
+      },
+      {
+        "name": "Jesus Efren"
+      }
+    ],
+    "diagrams": [
+      {
+        "id": 0,
+        "title": "New STRIDE diagram",
+        "diagramType": "STRIDE",
+        "placeholder": "New STRIDE diagram description",
+        "thumbnail": "./public/content/images/thumbnail.stride.jpg",
+        "version": "2.2.0",
+        "cells": [],
+        "description": "Modelo Stride v1"
+      }
+    ],
+    "diagramTop": 1,
+    "reviewer": "Jose Santiago",
+    "threatTop": 0
+  }
+}
