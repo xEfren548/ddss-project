@@ -39,8 +39,8 @@
                 "text": "Internet"
               }
             },
-            "id": "771f1e5d-7e5a-4e5a-a032-ff1bcb67e57e",
             "zIndex": -1,
+            "id": "771f1e5d-7e5a-4e5a-a032-ff1bcb67e57e",
             "data": {
               "type": "tm.BoundaryBox",
               "name": "Internet",
@@ -64,8 +64,8 @@
                 "text": "Maquina \ndel usuario"
               }
             },
-            "id": "e4f050f5-ac9c-431d-a319-e4f398c94a81",
             "zIndex": -1,
+            "id": "e4f050f5-ac9c-431d-a319-e4f398c94a81",
             "data": {
               "type": "tm.BoundaryBox",
               "name": "Maquina \ndel usuario",
@@ -89,8 +89,8 @@
                 "text": "Red del Usuario"
               }
             },
-            "id": "02a2172d-bd03-4d47-bc62-2f10801c88a0",
             "zIndex": -1,
+            "id": "02a2172d-bd03-4d47-bc62-2f10801c88a0",
             "data": {
               "type": "tm.BoundaryBox",
               "name": "Red del Usuario",
@@ -114,8 +114,8 @@
                 "text": "Centro de datos (Protegido)"
               }
             },
-            "id": "52484a6f-5a42-412c-9072-888543316349",
             "zIndex": -1,
+            "id": "52484a6f-5a42-412c-9072-888543316349",
             "data": {
               "type": "tm.BoundaryBox",
               "name": "Centro de datos (Protegido)",
@@ -139,8 +139,8 @@
                 "text": "Centro de Datos (Restringido)"
               }
             },
-            "id": "54e29718-eb03-4edf-85df-bf4347a68ad0",
             "zIndex": -1,
+            "id": "54e29718-eb03-4edf-85df-bf4347a68ad0",
             "data": {
               "type": "tm.BoundaryBox",
               "name": "Centro de Datos (Restringido)",
@@ -170,8 +170,8 @@
             },
             "visible": true,
             "shape": "actor",
-            "id": "5f6ae421-7a3e-4301-8091-dd10057d428c",
             "zIndex": 1,
+            "id": "5f6ae421-7a3e-4301-8091-dd10057d428c",
             "data": {
               "type": "tm.Actor",
               "name": "Usuario",
@@ -197,27 +197,41 @@
                 "text": "Sitio Web"
               },
               "body": {
-                "stroke": "#333333",
-                "strokeWidth": 1.5,
+                "stroke": "red",
+                "strokeWidth": 2.5,
                 "strokeDasharray": null
               }
             },
             "visible": true,
             "shape": "process",
-            "id": "283ddbb1-88ec-41fe-ab11-47ca7c4be9b8",
             "zIndex": 2,
+            "id": "283ddbb1-88ec-41fe-ab11-47ca7c4be9b8",
             "data": {
               "type": "tm.Process",
               "name": "Sitio Web",
               "description": "",
               "outOfScope": false,
               "reasonOutOfScope": "",
-              "hasOpenThreats": false,
+              "hasOpenThreats": true,
               "handlesCardPayment": false,
               "handlesGoodsOrServices": false,
-              "isWebApplication": false,
+              "isWebApplication": true,
               "privilegeLevel": "",
-              "threats": []
+              "threats": [
+                {
+                  "id": "de7ba853-b4ac-4496-bb95-ee53ca4bc2d8",
+                  "title": "New STRIDE threat",
+                  "status": "Open",
+                  "severity": "Medium",
+                  "type": "Spoofing",
+                  "description": "Provide a description for this threat",
+                  "mitigation": "Provide remediation for this threat or a reason if status is N/A",
+                  "modelType": "STRIDE",
+                  "new": true,
+                  "number": 3,
+                  "score": ""
+                }
+              ]
             }
           },
           {
@@ -241,8 +255,8 @@
             },
             "visible": true,
             "shape": "process",
-            "id": "be9bdfee-e250-4c39-bf46-711edce54450",
             "zIndex": 3,
+            "id": "be9bdfee-e250-4c39-bf46-711edce54450",
             "data": {
               "type": "tm.Process",
               "name": "Base de \nDatos",
@@ -278,8 +292,8 @@
             },
             "visible": true,
             "shape": "process",
-            "id": "9e5b32f2-1768-437d-9449-398c7dcaf9c5",
             "zIndex": 4,
+            "id": "9e5b32f2-1768-437d-9449-398c7dcaf9c5",
             "data": {
               "type": "tm.Process",
               "name": "API de \nUsuario",
@@ -308,27 +322,49 @@
                 "text": "API de \nAdmin"
               },
               "body": {
-                "stroke": "#333333",
-                "strokeWidth": 1.5,
+                "stroke": "red",
+                "strokeWidth": 2.5,
                 "strokeDasharray": null
               }
             },
             "visible": true,
             "shape": "process",
-            "id": "1d9f3de2-d843-42db-8135-ce5db93f4c28",
             "zIndex": 5,
+            "id": "1d9f3de2-d843-42db-8135-ce5db93f4c28",
             "data": {
               "type": "tm.Process",
               "name": "API de \nAdmin",
               "description": "",
               "outOfScope": false,
               "reasonOutOfScope": "",
-              "hasOpenThreats": false,
+              "hasOpenThreats": true,
               "handlesCardPayment": false,
               "handlesGoodsOrServices": false,
               "isWebApplication": false,
               "privilegeLevel": "",
-              "threats": []
+              "threats": [
+                {
+                  "id": "9103c553-f650-4e03-a172-087fe74d1ded",
+                  "title": "Insider Threat",
+                  "status": "Open",
+                  "severity": "Medium",
+                  "type": "Information disclosure",
+                  "description": "A malicious actor with legitimate access to the system, such as a disgruntled employee or contractor.",
+                  "mitigation": "Eliminate access from everyone which no longer works in the company.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 4,
+                  "score": "7"
+                }
+              ],
+              "threatFrequency": {
+                "spoofing": 0,
+                "tampering": 0,
+                "repudiation": 0,
+                "informationDisclosure": 1,
+                "denialOfService": 0,
+                "elevationOfPrivilege": 0
+              }
             }
           },
           {
@@ -441,15 +477,15 @@
               "threats": []
             },
             "id": "c61cb818-45b5-4551-8d0d-7302c72c5ce1",
+            "labels": [
+              ""
+            ],
             "source": {
               "cell": "be9bdfee-e250-4c39-bf46-711edce54450"
             },
             "target": {
               "cell": "1d9f3de2-d843-42db-8135-ce5db93f4c28"
-            },
-            "labels": [
-              ""
-            ]
+            }
           },
           {
             "shape": "flow",
@@ -483,15 +519,15 @@
               "threats": []
             },
             "id": "f23cf106-fa7e-4319-ab6f-b28e40ab824d",
+            "labels": [
+              "HTTP"
+            ],
             "source": {
               "cell": "5f6ae421-7a3e-4301-8091-dd10057d428c"
             },
             "target": {
               "cell": "283ddbb1-88ec-41fe-ab11-47ca7c4be9b8"
             },
-            "labels": [
-              "HTTP"
-            ],
             "vertices": [
               {
                 "x": 370,
@@ -679,8 +715,8 @@
             },
             "visible": true,
             "shape": "store",
-            "id": "9115a47c-b11a-43fd-9bde-f656019d5d46",
             "zIndex": 11,
+            "id": "9115a47c-b11a-43fd-9bde-f656019d5d46",
             "data": {
               "type": "tm.Store",
               "name": "Usuarios",
@@ -720,8 +756,8 @@
             },
             "visible": true,
             "shape": "store",
-            "id": "c091e480-6ff9-4be0-9d72-9d161116f9c7",
             "zIndex": 12,
+            "id": "c091e480-6ff9-4be0-9d72-9d161116f9c7",
             "data": {
               "type": "tm.Store",
               "name": "Reservaciones",
@@ -761,8 +797,8 @@
             },
             "visible": true,
             "shape": "store",
-            "id": "10c4590b-6d15-496d-ab73-58039c99b6dd",
             "zIndex": 13,
+            "id": "10c4590b-6d15-496d-ab73-58039c99b6dd",
             "data": {
               "type": "tm.Store",
               "name": "Reservaciones de \nun Usuario",
@@ -802,8 +838,8 @@
             },
             "visible": true,
             "shape": "store",
-            "id": "d36e7cae-514d-4500-8476-b9a9fa766c67",
             "zIndex": 14,
+            "id": "d36e7cae-514d-4500-8476-b9a9fa766c67",
             "data": {
               "type": "tm.Store",
               "name": "Email",
@@ -825,6 +861,6 @@
     ],
     "diagramTop": 1,
     "reviewer": "Jose Santiago",
-    "threatTop": 2
+    "threatTop": 4
   }
 }
