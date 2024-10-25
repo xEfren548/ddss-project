@@ -1,4 +1,4 @@
-# TIESO INN
+# Hotel Bosque Encantado
 
 Tieso Inn es una página web que emula un negocio de hotelería.
 El objetivo principal es crear una plataforma sencilla de utilizar para consultar la disponibilidad de habitaciones y realizar reservaciones.
