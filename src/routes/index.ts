@@ -152,4 +152,8 @@ router.use('/categories', categoryRoutes);
 //rooms
 router.use('/rooms', roomRoutes);
 
+router.use('/holamundo', (req, res) => {
+    res.render('index')   
+})
+
 export default router;

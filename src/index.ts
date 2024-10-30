@@ -1,5 +1,10 @@
 import express from 'express';
 
+// Handlebars
+import { engine } from 'express-handlebars';
+
+import path from 'path';
+
 //Importar libreria de MongoDB
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
@@ -11,6 +16,9 @@ import swaggerConfig from './../swagger.config.json';
 
 //Cargar variables de entorno
 dotenv.config();
+
+// app.use(express.static(path.join(__dirname, 'src', 'public')));
+
 
 //importar rutas
 import router from './routes'
@@ -28,6 +36,11 @@ app.use(router);
 
 const swaggerDocs = swaggerJSDoc(swaggerConfig);
 app.use('/swagger', serve, setup(swaggerDocs));
+
+// Configuración del motor de plantillas
+app.engine('handlebars', engine());
+app.set('view engine', 'handlebars');
+app.set('views', './views');
 
 //Conexion de MongoDB
 mongoose.connect(dbUrl as string)
