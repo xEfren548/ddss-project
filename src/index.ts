@@ -1,4 +1,5 @@
 import express from 'express';
+import path from 'path';
 
 //Importar libreria de MongoDB
 import mongoose from 'mongoose';
@@ -16,6 +17,8 @@ dotenv.config();
 import router from './routes'
 const app = express();
 const PORT  = process.env.PORT || 3000;
+
+app.use('/', express.static(path.join(__dirname, '..', 'public')))
 
 //Importar la Hash de MongoDB
 const dbUrl = process.env.DB_URL;

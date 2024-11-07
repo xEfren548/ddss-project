@@ -118,6 +118,34 @@ class UsersController {
         }
     }
 
+    async register(req: Request, res: Response) {
+        try {
+            const { name, email, password, cellphone } = req.body
+            const userExists = await User.findOne({ email })
+
+            if (userExists) {
+                return res.status(HTTP_STATUS_CODES.BAD_REQUEST).send('Este email ya se esta usando')
+            }
+
+            const user_id = new mongoose.Types.ObjectId()
+            const hashPassword = await bcrypt.hash(password, 11)
+
+            const newUser = new User({
+                user_id,
+                name,
+                email,
+                password: hashPassword,
+                cellphone
+            })
+
+            await newUser.save();
+            res.status(HTTP_STATUS_CODES.CREATED).send(newUser);
+        } catch (error) {
+            console.error(error)
+            res.status(HTTP_STATUS_CODES.SERVER_ERROR).send('Error al crear el usuario')
+        }
+    }
+
 }
 
 export default new UsersController()

@@ -4,6 +4,7 @@ import usersController from "../controller/users.controller";
 //Importacion middlewares
 import { authenticateToken } from '../middlewares/auth';
 import { authorizaRole } from '../middlewares/permissions';
+import path from "path";
 
 const router = Router();
 /**
@@ -66,7 +67,7 @@ router.get('/:id', authenticateToken, usersController.getUserById);
  */
 
 //Ruta para crear un nuevo usuario | Permisos [Todos]
-router.post('/', authenticateToken, usersController.createUser);
+router.post('/', authenticateToken, authorizaRole(['Admin']), usersController.createUser);
 
 /**
  * @swagger
@@ -146,5 +147,11 @@ router.delete('/:id', authenticateToken, authorizaRole(['Admin']), usersControll
 
 //Ruta para el inicio de sesion | Permisos [ everyone ]
 router.post('/login', usersController.login);
+
+router.post('/register', usersController.register);
+
+router.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, '..', 'views', 'rooms'))
+})
 
 export default router;
