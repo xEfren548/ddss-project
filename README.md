@@ -45,8 +45,6 @@ npm install
 - dotenv 16.4.5
 - express 4.21.0
 - mongoose 8.7.1
-- swagger-jsdoc 6.2.8
-- swagger-ui-express 5.0.1
 
 #### Dependencias de desarrollador
 
@@ -54,8 +52,6 @@ npm install
 - @types/express 4.17.21
 - @types/mongoose 5.11.97
 - @types/node 22.7.4
-- @types/swagger-jsdoc 6.0.4
-- @types/swagger-ui-express 4.1.6
 - nodemon 3.1.7
 - ts-node 10.9.2
 - typescript 5.6.2

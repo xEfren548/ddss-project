@@ -32,18 +32,18 @@ class CategoriesController {
         try {
             const { category_id, name, num_of_beds, capacity } = req.body;
             const categoryExists = await Category.findOne({ category_id });
-            
+
             if (categoryExists) {
                 return res.status(HTTP_STATUS_CODES.BAD_REQUEST).send('Esta categoria ya existe');
             }
 
-            const newCategory = new Category ({
+            const newCategory = new Category({
                 category_id,
                 name,
                 num_of_beds,
                 capacity
             });
-    
+
             await newCategory.save();
             res.status(HTTP_STATUS_CODES.CREATED).send(newCategory);
         } catch (error) {

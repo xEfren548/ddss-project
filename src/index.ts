@@ -3,31 +3,30 @@ import express from 'express';
 //Importar libreria de MongoDB
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
-
-//Importar swagger
-import swaggerJSDoc from 'swagger-jsdoc';
-import { serve, setup } from 'swagger-ui-express';
-import swaggerConfig from './../swagger.config.json';
+import path from 'path';
+//importar rutas
+import router from './routes'
 
 //Cargar variables de entorno
 dotenv.config();
 
-//importar rutas
-import router from './routes'
 const app = express();
 const PORT  = process.env.PORT || 3000;
 
 //Importar la Hash de MongoDB
 const dbUrl = process.env.DB_URL;
-//console.log('Mongo URL:', dbUrl);
 
+//Path para estilos. (CSS/JS)
+app.use('/', express.static(path.join(__dirname, '..', 'public')))
+
+// Middleware para manejar JSON
 app.use(express.json());
+
+// Middleware para manejar datos del formulario (x-www-form-urlencoded)
+app.use(express.urlencoded({ extended: true }));
+
+//Configuracion de rutas
 app.use(router);
-
-//Conexion a Swagger
-
-const swaggerDocs = swaggerJSDoc(swaggerConfig);
-app.use('/swagger', serve, setup(swaggerDocs));
 
 //Conexion de MongoDB
 mongoose.connect(dbUrl as string)

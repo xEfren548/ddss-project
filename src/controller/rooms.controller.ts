@@ -42,7 +42,7 @@ class RoomsController {
                 return res.status(HTTP_STATUS_CODES.BAD_REQUEST).send('Categoría ' + category_id + ' no encontrada');
             }
 
-            const newRoom = new Room ({
+            const newRoom = new Room({
                 room_id,
                 category_id,
                 price_per_night,

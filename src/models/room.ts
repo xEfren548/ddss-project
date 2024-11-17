@@ -9,13 +9,13 @@ interface IRoom extends Document {
     status: string;
 }
 
-const roomSchema = new Schema ({
+const roomSchema = new Schema({
     room_id: { type: Schema.Types.ObjectId, required: true },
     category_id: { type: Schema.Types.ObjectId, ref: 'Category', required: true },
-    price_per_night: { type: Number, required: true }, 
+    price_per_night: { type: Number, required: true },
     description: { type: String, required: true },
-    image_url: { type: String, required: true},
-    status: { type: String, enum: ['Ocupado', 'Disponible'], default: 'Disponible'}
+    image_url: { type: String, required: true },
+    status: { type: String, enum: ['Ocupado', 'Disponible'], default: 'Disponible' }
 })
 
 const room = model('room', roomSchema);
