@@ -17,7 +17,6 @@ import swaggerConfig from './../swagger.config.json';
 //Cargar variables de entorno
 dotenv.config();
 
-// app.use(express.static(path.join(__dirname, 'src', 'public')));
 
 
 //importar rutas
@@ -31,6 +30,8 @@ const dbUrl = process.env.DB_URL;
 
 app.use(express.json());
 app.use(router);
+
+app.use(express.static(path.join(__dirname, '../public')));
 
 //Conexion a Swagger
 
