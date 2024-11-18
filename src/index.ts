@@ -41,7 +41,7 @@ app.use('/swagger', serve, setup(swaggerDocs));
 // Configuración del motor de plantillas
 app.engine('handlebars', engine());
 app.set('view engine', 'handlebars');
-app.set('views', './views');
+app.set('views', 'src/views');
 
 //Conexion de MongoDB
 mongoose.connect(dbUrl as string)
