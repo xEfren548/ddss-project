@@ -3,6 +3,8 @@ import reservationRoutes from './reservation'
 import userRoutes from './user'
 import categoryRoutes from './categories';
 import roomRoutes from './rooms';
+import loginRoutes from './login';
+import registerRoutes from './register';
 
 const router = Router();
 
@@ -151,6 +153,12 @@ router.use('/categories', categoryRoutes);
 
 //rooms
 router.use('/rooms', roomRoutes);
+
+//login
+router.use('/', loginRoutes);
+
+//register
+router.use('/', registerRoutes);
 
 router.use('/holamundo', (req, res) => {
     res.render('index')   
