@@ -1,46 +1,103 @@
-document.getElementById('registerForm').addEventListener('submit', function(event) {
-    event.preventDefault();
-  
-    // Obtener los valores de los campos
-    const name = document.getElementById('name').value.trim();
-    const email = document.getElementById('email').value.trim();
-    const password = document.getElementById('password').value.trim();
-    const confirmPassword = document.getElementById('confirm-password').value.trim();
-    const phone = document.getElementById('phone').value.trim();
-    const errorMessage = document.getElementById('error-message');
-  
-    // Expresiones regulares para validar email y teléfono
-    const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    const phonePattern = /^\d{10,}$/;
-  
-    // Validaciones
-    if (!name || !email || !password || !confirmPassword || !phone) {
-      errorMessage.textContent = "Por favor, completa todos los campos.";
-      errorMessage.style.display = "block";
-      return;
-    }
-    
-    if (!emailPattern.test(email)) {
-      errorMessage.textContent = "Por favor, ingresa un email válido.";
-      errorMessage.style.display = "block";
-      return;
-    }
-    
-    if (password !== confirmPassword) {
-      errorMessage.textContent = "Las contraseñas no coinciden.";
-      errorMessage.style.display = "block";
-      return;
-    }
-    
-    if (!phonePattern.test(phone)) {
-      errorMessage.textContent = "El número de teléfono debe tener al menos 10 dígitos.";
-      errorMessage.style.display = "block";
-      return;
-    }
-  
-    // Si todas las validaciones pasan, puedes enviar el formulario o hacer otra acción
-    errorMessage.style.display = "none";
-    alert("Registro exitoso.");
-    // Aquí podrías enviar los datos al servidor, limpiar el formulario, etc.
+//Escucha el evento DOMContentLoaded que indica que el documento HTML ha sido completamente cargado
+document.addEventListener('DOMContentLoaded', () => {
+    const passwordInput = document.getElementById('password');
+    const confirmPasswordInput = document.getElementById('confirmPassword');
+    const togglePassword = document.getElementById('togglePassword');
+    const registerForm = document.getElementById('register-form');
+
+    //elementos de los requisitos de la contraseña para mostrar su estado
+    const passwordRequirements = {
+        length: document.getElementById('length-requirement'),
+        uppercase: document.getElementById('uppercase-requirement'),
+        special: document.getElementById('special-requirement')
+    };
+    //Spinner de carga
+    const loadingSpinner = document.getElementById('loading-spinner');
+
+    // Expresión regular para validar la contraseña
+    const passwordRegex = /^(?=.*[A-Z])(?=.*[!.@#$%^&*])(?=.{8,})/;
+
+    // Mostrar/ocultar contraseña (Ojo)
+    togglePassword.addEventListener('click', () => {
+        const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+        passwordInput.setAttribute('type', type);
+        confirmPasswordInput.setAttribute('type', type);
+
+        // Cambiar el icono
+        togglePassword.innerHTML = type === 'password' ? '<i class="fa-solid fa-eye-slash"></i>' : '<i class="fa-solid fa-eye"></i>';
+
+    });
+
+    // Validación de requisitos de contraseña en tiempo real
+    passwordInput.addEventListener('input', () => {
+        const value = passwordInput.value;
+        passwordRequirements.length.style.color = value.length >= 8 ? 'green' : 'red';
+        passwordRequirements.uppercase.style.color = /[A-Z]/.test(value) ? 'green' : 'red';
+        passwordRequirements.special.style.color = /[!.@#$%^&*]/.test(value) ? 'green' : 'red';
+    });
+
+    // Validar coincidencia de contraseña
+    confirmPasswordInput.addEventListener('input', () => {
+        if (confirmPasswordInput.value !== passwordInput.value) {
+            confirmPasswordInput.setCustomValidity("Las contraseñas no coinciden.");
+        } else {
+            confirmPasswordInput.setCustomValidity("");
+        }
+    });
+
+    // Mostrar el spinner y procesar el envío del formulario
+    registerForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        //Alert | no coinciden las contraseñas
+        if (passwordInput.value !== confirmPasswordInput.value) {
+            alert("Las contraseñas no coinciden");
+            return;
+        }
+
+        //Aler | Password requerimientos minimos
+        if (!passwordRegex.test(passwordInput.value)) {
+            alert("La contraseña no cumple con los requisitos mínimos.");
+            return;
+        }
+
+        //Mostrar spinner de carga
+        loadingSpinner.classList.remove('hidden');
+
+        //Crear objeto formData con el dato
+        const formData = new FormData(registerForm);
+        const data = {
+            name: formData.get('name'),
+            email: formData.get('email'),
+            password: formData.get('password'),
+            cellphone: formData.get('cellphone')
+        };
+
+        try {
+            //Realiza la peticion POST para registrar el usuario
+            const response = await fetch('/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+
+            //Respuesta exitosa
+            if (response.ok) {
+                alert('Usuario registrado exitosamente.');
+                window.location.href = '/login';
+
+            //Error
+            } else {
+                const errorMessage = await response.text();
+                alert(`Error al registrar: ${errorMessage}`);
+            }
+
+        //atrapa el error
+        } catch (error) {
+            console.error("Error en el registro:", error);
+            alert('Ocurrió un error. Inténtelo nuevamente.');
+        } finally {
+            loadingSpinner.classList.add('hidden');
+        }
+    });
 });
-  
