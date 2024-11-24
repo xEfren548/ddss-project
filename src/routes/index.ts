@@ -5,8 +5,6 @@ import categoryRoutes from './categories';
 import roomRoutes from './rooms';
 import loginRoutes from './login';
 import registerRoutes from './register';
-import googleRoutes from './google';
-import chatRoutes from './support_chat'
 import path from "path";
 
 const router = Router();
@@ -148,9 +146,6 @@ router.use('/login', loginRoutes);
 // /register
 router.use('/register', registerRoutes);
 
-// /google
-router.use('/auth/google', googleRoutes);
-
 // /users
 router.use('/users', userRoutes);
 
@@ -162,8 +157,5 @@ router.use('/categories', categoryRoutes);
 
 //rooms
 router.use('/rooms', roomRoutes);
-
-//chat
-router.use('/support', chatRoutes);
 
 export default router;
