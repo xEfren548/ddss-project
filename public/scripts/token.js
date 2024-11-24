@@ -2,13 +2,15 @@ function logout() {
   localStorage.removeItem("user_id");
   localStorage.removeItem("token");
   localStorage.removeItem("name");
-  location.reload();
+  window.location.href = "/login";
 }
 
 document.addEventListener("DOMContentLoaded", async function () {
   const userId = localStorage.getItem("user_id");
   const token = localStorage.getItem("token");
-  if (token) {
+  if (!token) {
+    logout()
+  } else { 
     try {
       const response = await fetch(`/users/${userId}`, {
         method: "GET",
@@ -43,22 +45,3 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
   }
 });
-
-const params = new URLSearchParams(window.location.search);
-const tokenParam = params.get("token");
-const username = params.get("name");
-const userId = params.get("user_id");
-
-if (tokenParam) {
-  // Almacenar los valores en localStorage
-  localStorage.setItem("token", tokenParam);
-  if (username) localStorage.setItem("name", username);
-  if (userId) localStorage.setItem("user_id", userId);
-
-  // Limpiar la URL para mayor seguridad
-  params.delete("token");
-  params.delete("name");
-  params.delete("user_id");
-  const newUrl = `${window.location.origin}${window.location.pathname}`;
-  history.replaceState(null, "", newUrl);
-}

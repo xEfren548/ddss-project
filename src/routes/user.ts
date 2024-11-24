@@ -4,7 +4,6 @@ import usersController from "../controller/users.controller";
 //Importacion middlewares
 import { authenticateToken } from '../middlewares/auth';
 import { authorizaRole } from '../middlewares/permissions';
-import path from "path";
 
 const router = Router();
 /**
@@ -20,15 +19,15 @@ const router = Router();
  *              description: server error
  */
 
-//Ruta para Obtener todos los usuarios | Permisos [Admin, Gerente]
-router.get('/', authenticateToken, authorizaRole(['Admin', 'Gerente']), usersController.getAllUsers);
+//Ruta para Obtener todos los usuarios | Permisos [Admin]
+router.get('/', authenticateToken, authorizaRole(['Admin']), usersController.getAllUsers);
 
 /**
  * @swagger
- * /users{email}:
+ * /users{id}:
  *  get:
  *      tags: [Users]
- *      description: get one user by email
+ *      description: get one user by id
  *      responses:
  *          200:
  *              description: user
@@ -38,8 +37,11 @@ router.get('/', authenticateToken, authorizaRole(['Admin', 'Gerente']), usersCon
  *              description: server error
  */
 
-//Ruta para Obtener un usuario por el email | Permisos [ everyone ]
+//Ruta para Obtener un usuario por el id | Permisos [ everyone ]
 router.get('/:id', authenticateToken, usersController.getUserById);
+
+
+router.get('/profile/:id', usersController.getRenderUserById)
 
 /**
  * @swagger
@@ -67,7 +69,7 @@ router.get('/:id', authenticateToken, usersController.getUserById);
  */
 
 //Ruta para crear un nuevo usuario | Permisos [Todos]
-router.post('/', authenticateToken, authorizaRole(['Admin']), usersController.createUser);
+router.post('/', authenticateToken, usersController.createUser);
 
 /**
  * @swagger
@@ -111,47 +113,5 @@ router.put('/:id', authenticateToken, authorizaRole(['Admin', 'Gerente']), users
 //Ruta para eliminar un usuario | Permisos [Admin]
 router.delete('/:id', authenticateToken, authorizaRole(['Admin']), usersController.deleteUser);
 
-/**
- * @swagger
- * /login:
- *  post:
- *      tags: [Auth]
- *      description: login and obtain jwt token
- *      requestBody:
- *          required: true
- *          content: 
- *              application/json:
- *                  schema:
- *                      type: object
- *                      properties:
- *                          email:
- *                              type: string
- *                          password:
- *                              type: string
- *      responses: 
- *          200:
- *              description: token generated succesfully
- *          401:
- *              description: authentication failed
- *              content:
- *                  application/json:
- *                      schema:
- *                          type: object
- *                          properties:
- *                              error:
- *                                  type: string
- *          500: 
- *              description: server error
- */
-
-
-//Ruta para el inicio de sesion | Permisos [ everyone ]
-router.post('/login', usersController.login);
-
-router.post('/register', usersController.register);
-
-router.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, '..', 'views', 'rooms'))
-})
 
 export default router;
