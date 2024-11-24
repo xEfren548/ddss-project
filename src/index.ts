@@ -9,8 +9,6 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 //importar rutas
 import router from './routes'
-//importacion google
-import { googleAuth } from './middlewares/authGoogle';
 
 //Importar swagger
 import swaggerJSDoc from 'swagger-jsdoc';
@@ -34,9 +32,6 @@ app.use(express.json());
 
 // Middleware para manejar datos del formulario (x-www-form-urlencoded)
 app.use(express.urlencoded({ extended: true }));
-
-// Configurar autenticación con Google
-googleAuth(app);
 
 //Configuracion de rutas
 app.use(router);
