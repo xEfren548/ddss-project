@@ -47,6 +47,7 @@ class RoomsController {
         return res.json(room);
       } else {
         // Renderizar la vista utilizando Handlebars
+        console.log(room.toObject())
         return res.render("room",  room.toObject() );
       }
     } catch (error) {
@@ -64,6 +65,7 @@ class RoomsController {
         room_id,
         category_id,
         price_per_night,
+        name,
         description,
         image_url,
         status,
@@ -83,6 +85,7 @@ class RoomsController {
       }
 
       const newRoom = new Room({
+        name,
         room_id,
         category_id,
         price_per_night,

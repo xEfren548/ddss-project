@@ -39,7 +39,7 @@ router.get('/', authenticateToken, authorizaRole(['Recepcionista', 'Gerente']), 
  */
 
 //Obtener la reservacion por ID | Permisos [Cliente, Recepcionista]
-router.get('/:id', authenticateToken, authorizaRole(['Cliente', 'Recepcionista']), reservationController.getReservationById);
+router.get('/:id', authorizaRole(['Cliente', 'Recepcionista']), reservationController.getReservationById);
 
 /**
  * @swagger

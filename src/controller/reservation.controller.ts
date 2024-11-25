@@ -7,7 +7,6 @@ import mongoose from "mongoose";
 import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
 import fs from 'fs';
 import path from 'path';
-import { generateReservationPDF } from '../utils/pdfGenerator';
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -125,9 +124,12 @@ class ReservationController {
     try {
       console.log("Datos recibidos en el cuerpo:", req.body);
 
+      console.log("room id: ", room_id);
+      console.log("user exists: ", user_id);
+
         const userExists = await User.findOne({ user_id });
         const roomObjectId = mongoose.Types.ObjectId.isValid(room_id) ? new mongoose.Types.ObjectId(room_id) : null;
-        const roomExists = roomObjectId ? await Room.findById(roomObjectId) : null;
+        const roomExists = roomObjectId ? await Room.findOne({room_id: roomObjectId}) : null;
 
         // validacion si usuario o la habitación no existen = error
         if (!userExists || !roomExists) {
