@@ -19,7 +19,9 @@ const reservationSchema: Schema = new Schema({
     arrival_date: { type: Date, required: true },
     checkout_date: { type: Date, required: true },
     num_of_guest: { type: Number, required: true },
-    status: { type: String, enum:  ['Pagado', 'Pendiente', 'Cancelado', 'Confirmado'], default: 'Pendiente' }
+    status: { type: String, enum:  ['Pagado', 'Pendiente', 'Cancelado', 'Confirmado'], default: 'Pendiente' },
+    total: { type: Number, required: true },
+    nNights: { type: Number, required: true }
 });
 
 export default mongoose.model<IReservation>('Reservation', reservationSchema);

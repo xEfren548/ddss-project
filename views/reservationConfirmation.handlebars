@@ -61,90 +61,48 @@
   <div class="container">
     <div class="row mt-3">
       <div class="col-12">
-        {{#if this.name}}
-        <h1>Reserva en {{this.name}}</h1>
+        {{#if room.name}}
+        <h4>Todo listo!</h4>
+        <h4>Tu reserva en {{room.name}} ha sido confirmada</h4>
         {{else}}
         <h1>Reserva</h1>
         {{/if}}
       </div>
     </div>
 
-    <div class="row">
-      <div class="col-12">
-        <h5>Datos de usuario</h5>
-
-      </div>
-      <div class="col-12 ml-3">
-        <div class="mb-3">
-          <label for="" class="form-label">Nombre</label>
-          <input type="text" class="form-control" name="" id="client-name" aria-describedby="helpId" placeholder="" />
-        </div>
-      </div>
-
-      <div class="col-5 ml-3">
-        <div class="mb-3">
-          <label for="" class="form-label">Email</label>
-          <input type="email" class="form-control" name="" id="client-email" aria-describedby="emailHelpId"
-            placeholder="abc@mail.com" />
-        </div>
-      </div>
-
-      <div class="col-6 ml-3">
-        <label for="" class="form-label">Telefono</label>
-        <input type="tel" class="form-control" name="" id="client-cellphone" aria-describedby="emailHelpId"
-          placeholder="333456789" />
-      </div>
-
-    </div>
-
     <div class="row mt-3">
       <div class="col-12">
-        <h5>Datos de la reserva</h5>
+        <h5><b>Datos de la reserva</b></h5>
       </div>
-      <div class="col-8">
-        <div class="mb-0 ml-3">
-          <label for="" class="form-label">Selecciona las fechas deseadas</label>
-          <input class="form-control form-control-solid" placeholder="Selecciona" id="date_range" />
-          <input type="hidden" id="event_start_date">
-          <input type="hidden" id="event_end_date">
+      <div class="col-4">
+        <div class="mb-3">
+          <label for="" class="form-label">Dia de llegada: {{reservation.formattedArrivalDate}}</label>
         </div>
       </div>
       <div class="col-4">
         <div class="mb-3">
-          <label for="" class="form-label">Noches</label>
-          <input type="number" disabled class="form-control" name="" id="nNights" aria-describedby="helpId"
-            placeholder="" />
+          <label for="" class="form-label">Dia de salida: {{reservation.formattedCheckoutDate}}</label>
         </div>
       </div>
-      <div class="col-4 ml-3">
+      <div class="col-4">
         <div class="mb-3">
-          <label for="" class="form-label">Huéspedes</label>
-          <input type="number" class="form-control" name="" id="nHuespedes" aria-describedby="helpId"
-            placeholder="" min="1" max="99"/>
+          <label for="" class="form-label">Noches: {{reservation.nNights}}</label>
+        </div>
+      </div>
+      <div class="col-6">
+        <div class="mb-3">
+          <label for="" class="form-label">Huéspedes: {{reservation.num_of_guest}}</label>
         </div>
       </div>
     </div>
 
     <div class="row">
       <div class="col-12">
-        <h5>Detalles de los precios</h5>
+        <h5><b>Detalles de los precios</b></h5>
       </div>
     </div>
 
     <div class="row">
-      <div class="col-6 ml-3">
-          <label for="" class="form-label">Precio por noche</label>
-        <div class="input-group">
-          <div class="input-group-prepend">
-            <span class="input-group-text">$</span>
-          </div>
-          <input type="text" disabled class="form-control" name="" id="price_per_night" aria-describedby="helpId"
-            placeholder="" value="{{this.price_per_night}}" />
-
-        </div>
-        <div class="mb-3">
-        </div>
-      </div>
       <div class="col-5">
           <label for="" class="form-label">Precio total</label>
         <div class="input-group">
@@ -152,62 +110,17 @@
             <span class="input-group-text">$</span>
           </div>
           <input type="text" disabled class="form-control" name="" id="total_price" aria-describedby="helpId"
-            placeholder="" />
+            placeholder="" value="{{reservation.total}}"/>
         </div>
       </div>
-    </div>
-
-    <div class="col-12">
-      <button
-        type="button"
-        name=""
-        id="btn-reservar"
-        class="btn btn-primary d-block"
-      >
-        Reservar
-      </button>
     </div>
     
 
 
   </div>
 
-  <script src="/scripts/token.js"></script>
   <script>
-    document.addEventListener("DOMContentLoaded", async function () {
-      const userId = localStorage.getItem("user_id");
-      const token = localStorage.getItem("token");
-      console.log(userId);
 
-      async function getUser() {
-        try {
-          const response = await fetch(`/users/${userId}`, {
-            method: "GET",
-            headers: {
-              Authorization: `Token ${token}`,
-            },
-          });
-          if (response.ok) {
-            const user = await response.json();
-            console.log(user);
-            return user;
-          }
-        } catch (error) {
-          console.error(error);
-          return;
-        }
-      }
-      const user = await getUser();
-      console.log(user)
-
-      document.getElementById("client-name").value = user.name;
-      document.getElementById("client-email").value = user.email;
-      document.getElementById("client-cellphone").value = user.cellphone;
-
-      const dateRangeInput = document.getElementById("date_range");
-      const nightsInput = document.getElementById("nNights");
-
-      dateRangeInput.addEventListener("change", function () {
         const arrivalDate = document.getElementById("event_start_date");
         const departureDate = document.getElementById("event_end_date");
         calculateNightDifference(arrivalDate, departureDate);
@@ -248,9 +161,7 @@
               room_id: '{{this.room_id}}',
               arrival_date: arrivalDate.value,
               checkout_date: departureDate.value,
-              num_of_guest: nHuespedes.value,
-              total: document.getElementById("total_price").value,
-              nNights: nightsInput.value
+              num_of_guest: nHuespedes.value
             }),
           });
 
@@ -261,8 +172,9 @@
           }
 
           const data = await response.json();
+          console.log(data);
           const reservation_num = data.reservation_num;
-          window.location.href = `/reservations/confirmation/${reservation_num}`
+          window.location.href = `/reservation/${reservation_num}`
         } catch(error) {
           console.error(error)
           Swal.fire({
