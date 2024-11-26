@@ -157,6 +157,18 @@
       </div>
     </div>
 
+    <!--Boton de reservar-->
+    <div class="col-12">
+      <button
+        type="button"
+        id="btn-reservar"
+        class="btn btn-primary d-block"
+      >
+        Reservar
+      </button>
+    </div>
+
+    <!--
     <div class="col-12">
       <button
         type="button"
@@ -167,7 +179,7 @@
         Reservar
       </button>
     </div>
-    
+    -->
 
 
   </div>
@@ -220,6 +232,68 @@
 
       })
 
+      //Funcionalidad - Reservacion
+      const btnReservar = document.getElementById("btn-reservar");
+      btnReservar.addEventListener("click", async function (event) {
+        event.preventDefault();
+
+        if (!token) {
+            Swal.fire({
+                icon: "error",
+                title: "Usuario no autenticado",
+                text: "Por favor, inicia sesión para continuar.",
+            });
+            return;
+        }
+
+        const reservationData = {
+            room_id: '{{this.room_id}}',
+            arrival_date: document.getElementById("event_start_date").value,
+            departure_date: document.getElementById("event_end_date").value,
+            num_of_guests: document.getElementById("nHuespedes").value,
+            total: document.getElementById("total_price").value,
+        };
+        //const redirectUrl = `/payments/summary?room_id=${this.roomId}&arrival_date=${this.arrivalDate}&departure_date=${this.departureDate}&num_of_guests=${this.nHuespedes}&total=${this.total}`;
+
+        //test
+        console.log("Token recuperado desde room.handlebars:", token);
+        try {
+            const response = await fetch("/payments/summary", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Token ${token}`,
+                },
+                body: JSON.stringify(reservationData),
+            });
+
+            //test
+            console.log("Respuesta del servidor:", response);
+
+            if (response.ok) {
+                const { redirectUrl } = await response.json();
+                //test
+                console.log("Redirigiendo a:", redirectUrl);
+                window.location.href = redirectUrl;
+            } else {
+              const errorData = await response.json();
+              Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: errorData.error || "Ocurrió un error.",
+              });
+            }
+        } catch (error) {
+            console.error("Error al procesar la reservación:", error);
+            Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "Error al procesar la reservación: " + error.message,
+            });
+        }
+      });
+
+      /*
       const btnReservar = document.getElementById("btn-reservar");
       btnReservar.addEventListener("click", async function (event) {
         event.preventDefault();
@@ -274,6 +348,7 @@
         }
 
       })
+      */
 
 
 
