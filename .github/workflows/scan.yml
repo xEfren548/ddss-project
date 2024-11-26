@@ -43,3 +43,9 @@ jobs:
           name: npm-audit-html
           path: npm-audit.html
     
+      - name: Upload json-cl Report
+        uses: actions/upload-artifact@v3
+        with:
+          name: audit-ci-report.json
+          path: audit-ci-report.json
+    
