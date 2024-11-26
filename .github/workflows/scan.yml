@@ -31,6 +31,9 @@ jobs:
       - name: Run audit-ci
         run: audit-ci --json > audit-ci-report.json
 
+      - name: OWASP ZAP Baseline Scan
+        run: docker run -v $(pwd):/zap/wrk:rw -t owasp/zap2docker-stable zap-baseline.py -t http://localhost:3000 -r zap_report.html
+
       - name: Upload JSON Report
         uses: actions/upload-artifact@v3
         with:
@@ -42,3 +45,9 @@ jobs:
         with:
           name: npm-audit-html
           path: npm-audit.html
+    
+      - name: Upload ZAP Report
+        uses: actions/upload-artifact@v3
+        with:
+          name: zap-report
+          path: zap_report.html
