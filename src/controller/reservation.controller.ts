@@ -73,7 +73,7 @@ class ReservationController {
         .status(HTTP_STATUS_CODES.SERVER_ERROR)
         .json({ message: "Error al obtener la reserva", error });
     }
-  }=
+  }
 
   //GET | ReservationById
   async getReservationById(req: Request, res: Response) {
