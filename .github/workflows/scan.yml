@@ -1,0 +1,29 @@
+name: DevSecOps Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v2
+
+    - name: Install Dependencies
+      run: npm install
+
+    - name: Run Tests
+      run: npm test
+
+    - name: Run ESLint
+      run: npm run lint
+
+    - name: Scan Vulnerabilities
+      run: npm audit --production
+
+    - name: Static Code Analysis
+      uses: returntocorp/semgrep-action@v1
