@@ -8,7 +8,7 @@ import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
 import fs from 'fs';
 import path from 'path';
 import dotenv from 'dotenv';
-import moment from 'moment';
+import moment from 'moment-timezone';
 
 dotenv.config();
 
@@ -61,8 +61,9 @@ class ReservationController {
           .json({ message: "Reserva no encontrada" });
       }
       console.log(reservation.room_id)
-      const formattedArrivalDate = moment(reservation.arrival_date).format('DD-MM-YYYY');      
-      const formattedCheckoutDate = moment(reservation.checkout_date).format('DD-MM-YYYY');      
+      const formattedArrivalDate = moment.utc(reservation.arrival_date).format('DD-MM-YYYY');  
+      const formattedCheckoutDate = moment.utc(reservation.checkout_date).format('DD-MM-YYYY');
+
       const room = await Room.findOne({ room_id: reservation.room_id }).lean();
       console.log(reservation)
       console.log(room)
