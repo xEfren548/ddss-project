@@ -16,14 +16,14 @@ jobs:
         run: npm install
     
       - name: Install npm-audit-html
-        run: npm install npm-audit-html@1.5.0
+        run: npm install npm-audit-html
 
       - name: Run npm audit
         run: |
           npm audit --omit=dev --json > audit-report.json || true
 
       - name: Generate HTML Report
-        run: npx npm-audit-html --output audit-report.html || true
+        run: npm audit --json | npm-audit-html
 
       - name: Upload JSON Report
         uses: actions/upload-artifact@v3
