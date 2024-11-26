@@ -12,37 +12,33 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Cache Node.js modules
-        uses: actions/cache@v3
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
-
       - name: Install dependencies
         run: npm install
+    
+      - name: Install npm-audit-html
+        run: npm install -g npm-audit-html@latest
 
-      - name: Install audit-ci globally
-        run: npm install -g audit-ci
-
-      - name: Run audit-ci and generate JSON Report
-        run: audit-ci --json > audit-report.json || true
+      - name: Run npm audit
+        run: |
+          npm audit --json > audit-report.json || true
 
       - name: Generate HTML Report
-        run: |
-          npx json2html-cli --title "Audit Report" --input audit-report.json --output audit-report.html
+        run: npm audit --json | npm-audit-html
+
+      - name: Install audit-ci
+        run: npm install -g audit-ci
+
+      - name: Run audit-ci
+        run: audit-ci --json > audit-ci-report.json
 
       - name: Upload JSON Report
         uses: actions/upload-artifact@v3
         with:
-          name: audit-json-report
+          name: npm-audit-json
           path: audit-report.json
-          retention-days: 30
 
       - name: Upload HTML Report
         uses: actions/upload-artifact@v3
         with:
-          name: audit-html-report
-          path: audit-report.html
-          retention-days: 30
+          name: npm-audit-html
+          path: npm-audit.html
