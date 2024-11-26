@@ -7,7 +7,7 @@ class RoomsController {
   async getAll(req: Request, res: Response) {
     try {
       const rooms = await Room.find().populate({ path: 'category_id', model: 'category', select: 'name' });
-      console.log(rooms)
+      //console.log(rooms)
       const acceptHeader = req.headers.accept || "";
       if (acceptHeader.includes("application/json")) {
         res.json(rooms);
@@ -47,7 +47,7 @@ class RoomsController {
         return res.json(room);
       } else {
         // Renderizar la vista utilizando Handlebars
-        console.log(room.toObject())
+        //console.log(room.toObject())
         return res.render("room",  room.toObject() );
       }
     } catch (error) {

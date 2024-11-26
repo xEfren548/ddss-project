@@ -12,9 +12,9 @@ router.get('/', (req, res) => {
 });
 router.post("/summary", authenticateToken, renderPaymentSummary);
 
-router.get("/summary", authenticateToken, (req, res) => {
+router.get("/summary", (req, res) => {
     const { room_id, arrival_date, departure_date, num_of_guests, total } = req.query;
-
+    console.log(room_id)
     res.render("paymentSummary", {
         room_id,
         arrival_date,

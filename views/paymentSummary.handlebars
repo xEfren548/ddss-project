@@ -1,7 +1,7 @@
 <h1>Resumen del Pago</h1>
-<p>Habitación: {{room.name}}</p>
-<p>Descripción: {{room.description}}</p>
-<p>Precio por noche: ${{room.price_per_night}}</p>
+<p>Habitación: {{room_id.name}}</p>
+<p>Descripción: {{room_id.description}}</p>
+<p>Precio por noche: ${{room_id.price_per_night}}</p>
 <p>Fecha de llegada: {{arrival_date}}</p>
 <p>Fecha de salida: {{departure_date}}</p>
 <p>Número de huéspedes: {{num_of_guests}}</p>
@@ -12,11 +12,17 @@
 <!-- imoortar script-->
 <script src="https://js.stripe.com/v3/"></script>
 <script>
+    const token = localStorage.getItem('token')
+    console.log({{room_id}})
     document.getElementById("btn-proceder-pago").addEventListener("click", async function () {
         try {
             const response = await fetch('/payments/checkout', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: 
+                { 
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`, 
+                },
                 body: JSON.stringify({ total: {{ total }}, room_id: '{{room_id}}' }),
             });
 
