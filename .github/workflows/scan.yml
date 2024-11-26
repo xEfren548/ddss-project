@@ -16,7 +16,7 @@ jobs:
         run: npm install
     
       - name: Install npm-audit-html
-        run: npm install npm-audit-html
+        run: npm install -g npm-audit-html
 
       - name: Run npm audit
         run: |
