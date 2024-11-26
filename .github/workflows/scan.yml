@@ -25,12 +25,6 @@ jobs:
       - name: Generate HTML Report
         run: npm audit --json | npm-audit-html
 
-      - name: Install audit-ci
-        run: npm install -g audit-ci
-
-      - name: Run audit-ci
-        run: audit-ci --json > audit-ci-report.json
-
       - name: Upload JSON Report
         uses: actions/upload-artifact@v3
         with:
@@ -42,10 +36,3 @@ jobs:
         with:
           name: npm-audit-html
           path: npm-audit.html
-    
-      - name: Upload json-cl Report
-        uses: actions/upload-artifact@v3
-        with:
-          name: audit-ci-report.json
-          path: audit-ci-report.json
-    
