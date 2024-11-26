@@ -14,22 +14,40 @@ jobs:
 
       - name: Install dependencies
         run: npm install
-    
+
       - name: Install npm-audit-html
         run: npm install -g npm-audit-html
 
       - name: Run npm audit
+        run: npm audit --json > audit-report.json || true
+
+      - name: Transform audit report for HTML generation
         run: |
-          npm audit --json > audit-report.json || true
+          node <<EOF
+          const fs = require('fs');
+          const report = JSON.parse(fs.readFileSync('audit-report.json', 'utf8'));
+          const transformed = {
+            advisories: Object.values(report.vulnerabilities).reduce((acc, vuln, index) => {
+              acc[index + 1] = {
+                id: index + 1,
+                title: vuln.via[0].title || vuln.name,
+                severity: vuln.severity,
+                url: vuln.via[0].url || '',
+                module_name: vuln.name,
+                vulnerable_versions: vuln.range,
+                patched_versions: vuln.fixAvailable ? `>=${vuln.range.split('<')[1]}` : 'None',
+                recommendations: vuln.fixAvailable
+                  ? `Upgrade to ${vuln.range.split('<')[1]} or later`
+                  : 'No fix available',
+              };
+              return acc;
+            }, {}),
+          };
+          fs.writeFileSync('transformed-audit-report.json', JSON.stringify(transformed, null, 2));
+          EOF
 
       - name: Generate HTML Report
-        run: npm audit --json | npm-audit-html
-
-      - name: Install audit-ci
-        run: npm install -g audit-ci
-
-      - name: Run audit-ci
-        run: audit-ci --json > audit-ci-report.json
+        run: npm-audit-html -i transformed-audit-report.json -o audit-report.html
 
       - name: Upload JSON Report
         uses: actions/upload-artifact@v3
@@ -41,4 +59,4 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: npm-audit-html
-          path: npm-audit.html
+          path: audit-report.html
