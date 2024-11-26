@@ -5,23 +5,30 @@ import categoryRoutes from './categories';
 import roomRoutes from './rooms';
 import loginRoutes from './login';
 import registerRoutes from './register';
-import homeRoutes from './home';
+import path from "path";
 
 const router = Router();
 
 //Ruta raiz
 router.get('/', (req, res) => {
-    res.send('API Raiz funcionando');
+    res.render('home');
 });
 
+/**
+ * @swagger
+ * /:
+ *  get:
+ *      tags: [Default]
+ *      description: api home endpoint
+ *      responses:
+ *          200:
+ *              description: api success
+ */
 // /login
 router.use('/login', loginRoutes);
 
 // /register
 router.use('/register', registerRoutes);
-
-// /home
-router.use('/home', homeRoutes);
 
 // /users
 router.use('/users', userRoutes);

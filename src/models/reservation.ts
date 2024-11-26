@@ -14,12 +14,14 @@ export interface IReservation extends Document {
 //Schema de reservaciones
 const reservationSchema: Schema = new Schema({
     reservation_num: { type: String, required: true, unique: true },
-    user_id: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+    user_id: { type: Schema.Types.ObjectId, ref: 'users', required: true },
     room_id: { type: Schema.Types.ObjectId, ref: 'room', required: true },
     arrival_date: { type: Date, required: true },
     checkout_date: { type: Date, required: true },
     num_of_guest: { type: Number, required: true },
-    status: { type: String, enum: ['Pagado', 'Pendiente', 'Cancelado', 'Confirmado'], default: 'Pendiente' }
+    status: { type: String, enum:  ['Pagado', 'Pendiente', 'Cancelado', 'Confirmado'], default: 'Pendiente' },
+    total: { type: Number, required: true },
+    nNights: { type: Number, required: true }
 });
 
 export default mongoose.model<IReservation>('Reservation', reservationSchema);

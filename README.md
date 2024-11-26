@@ -1,4 +1,4 @@
-# Hotel Bosque Encantado
+# TIESO INN
 
 Tieso Inn es una página web que emula un negocio de hotelería.
 El objetivo principal es crear una plataforma sencilla de utilizar para consultar la disponibilidad de habitaciones y realizar reservaciones.
@@ -7,17 +7,15 @@ El objetivo principal es crear una plataforma sencilla de utilizar para consulta
 
 - Victor Manuel Tellez Amezcua
 - Jose Santiago Oseguera García
-- Alvarez Mancilla, Jesus Efren
-
+- Rodrigo López Coronado
 
 # Instrucciones para ejecutar el proyecto
 
 ### 1. Clonar el repositorio
 Clona el repositorio de GitHub en tu equipo local o descargando directamente el zip.
 ```bash
-git clone https://github.com/xEfren548/ddss-project.git
+git clone https://github.com/victortelles/Tecn.Des.Servidores_Proyecto.git
 ```
-
 ```bash
 https://codeload.github.com/victortelles/Tecn.Des.Servidores_Proyecto/zip/refs/heads/desarrollo?token=A5I7TOW6BE7QAGQMASLEJP3HBCHQO
 ```
@@ -33,7 +31,7 @@ git checkout main
 Entra al directorio del proyecto y ejecuta los siguientes comandos para instalar todas las dependencias requeridas para el proyecto.
 
 ```bash
-cd proyecto
+cd TiesoInn
 ```
 ```bash
 npm install

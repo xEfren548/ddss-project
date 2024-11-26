@@ -6,10 +6,10 @@ const router = Router();
 
 //Ruta register | GET
 router.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, '..', 'views', 'register.html'))
+    res.render('register')
 });
 
 //Ruta register | POST
-router.post('/', UserController.createUser);
+router.post('/', UserController.register);
 
 export default router;

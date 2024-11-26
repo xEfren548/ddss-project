@@ -1,0 +1,243 @@
+<head>
+  <title>Tieso Inn</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.1/css/all.css"
+    integrity="sha384-O8whS3fhG2OnA5Kas0Y9l3cfpmYjapjI0E4theH4iuMD+pLhbf6JI0jIMfYcK3yZ" crossorigin="anonymous" />
+
+  {{!-- Flatpickr --}}
+  <!-- JS for jQuery -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+  {{!-- Swal --}}
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="/styles/home.css" />
+</head>
+
+<body>
+  <!-- Nav Bar -->
+  <nav class="navbar navbar-expand-sm navbar-dark bg-orange">
+    <a class="navbar-brand" href="/"><i class="fa" aria-hidden="true"></i>
+      Tieso Inn</a>
+    <button class="navbar-toggler d-lg-none" type="button" data-toggle="collapse" data-target="#collapsibleNavId"
+      aria-controls="collapsibleNavId" aria-expanded="false" aria-label="Toggle navigation">
+      <i class="fa fa-caret-down" aria-hidden="true"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="collapsibleNavId">
+      <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+        <li class="nav-item">
+          <a class="nav-link" href="/">Inicio</a>
+        </li>
+        <li class="nav-item active">
+          <a class="nav-link" href="#">Reservar<span class="sr-only">(current)</span></a>
+        </li>
+      </ul>
+      <ul class="navbar-nav">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="dropdownId" data-toggle="dropdown" aria-haspopup="true"
+            aria-expanded="false">Ingreso</a>
+          <div class="dropdown-menu" aria-labelledby="dropdownId" id="dropdownMenu">
+            <a class="dropdown-item" id="option-1" href="/login">
+              Ingresar
+            </a>
+            <a class="dropdown-item" id="option-2" href="/register">
+              Registro
+            </a>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div class="row mt-3">
+      <div class="col-12">
+        {{#if room.name}}
+        <h4>Todo listo!</h4>
+        <h4>Tu reserva en {{room.name}} ha sido confirmada</h4>
+        {{else}}
+        <h1>Reserva</h1>
+        {{/if}}
+      </div>
+    </div>
+
+    <div class="row mt-3">
+      <div class="col-12">
+        <h5><b>Datos de la reserva</b></h5>
+      </div>
+      <div class="col-4">
+        <div class="mb-3">
+          <label for="" class="form-label">Dia de llegada: {{reservation.formattedArrivalDate}}</label>
+        </div>
+      </div>
+      <div class="col-4">
+        <div class="mb-3">
+          <label for="" class="form-label">Dia de salida: {{reservation.formattedCheckoutDate}}</label>
+        </div>
+      </div>
+      <div class="col-4">
+        <div class="mb-3">
+          <label for="" class="form-label">Noches: {{reservation.nNights}}</label>
+        </div>
+      </div>
+      <div class="col-6">
+        <div class="mb-3">
+          <label for="" class="form-label">Huéspedes: {{reservation.num_of_guest}}</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-12">
+        <h5><b>Detalles de los precios</b></h5>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-5">
+          <label for="" class="form-label">Precio total</label>
+        <div class="input-group">
+          <div class="input-type-prepend">
+            <span class="input-group-text">$</span>
+          </div>
+          <input type="text" disabled class="form-control" name="" id="total_price" aria-describedby="helpId"
+            placeholder="" value="{{reservation.total}}"/>
+        </div>
+      </div>
+    </div>
+    
+
+
+  </div>
+
+  <script>
+
+        const arrivalDate = document.getElementById("event_start_date");
+        const departureDate = document.getElementById("event_end_date");
+        calculateNightDifference(arrivalDate, departureDate);
+
+        const totalPriceInput = document.getElementById("total_price");
+        const pricePerNightValue = {{this.price_per_night}};
+
+        const totalPrice = pricePerNightValue * nightsInput.value;
+        totalPriceInput.value = totalPrice;
+
+      })
+
+      const btnReservar = document.getElementById("btn-reservar");
+      btnReservar.addEventListener("click", async function (event) {
+        event.preventDefault();
+
+        const arrivalDate = document.getElementById("event_start_date");
+        const departureDate = document.getElementById("event_end_date");
+        const nHuespedes = document.getElementById("nHuespedes");
+
+        try {
+            Swal.fire({
+            title: 'Creando reserva...',
+            allowOutsideClick: false,
+            didOpen: () => {
+                Swal.showLoading();
+            }
+        });
+          const response = await fetch(`/reservations?userId=${userId}`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Token ${token}`,
+            },
+            // user_id, room_id, arrival_date, checkout_date, num_of_guest, status
+            body: JSON.stringify({
+              user_id: userId,
+              room_id: '{{this.room_id}}',
+              arrival_date: arrivalDate.value,
+              checkout_date: departureDate.value,
+              num_of_guest: nHuespedes.value
+            }),
+          });
+
+          Swal.close();
+
+          if (!response.ok) {
+            throw new Error("Error al crear la reserva");
+          }
+
+          const data = await response.json();
+          console.log(data);
+          const reservation_num = data.reservation_num;
+          window.location.href = `/reservation/${reservation_num}`
+        } catch(error) {
+          console.error(error)
+          Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Error al crear la reserva: ' + error,
+          })
+
+        }
+
+      })
+
+
+
+
+
+
+
+
+
+      function calculateNightDifference(arrivalDate, departureDate) {
+        console.log('Desde calcular noches')
+        const arrivalValue = new Date(arrivalDate.value);
+        const departureValue = new Date(departureDate.value);
+
+        // Verifica si las fechas son válidas
+        if (!isNaN(arrivalValue) && !isNaN(departureValue) && departureValue >= arrivalValue) {
+          const timeDifference = departureValue.getTime() - arrivalValue.getTime();
+          const nightDifference = Math.ceil(timeDifference / (1000 * 3600 * 24)); // Calcula la diferencia en días
+
+          nightsInput.value = nightDifference
+        } else {
+          nightsInput.value = 0
+        }
+      }
+
+      flatpickr("#date_range", {
+        mode: "range",
+        dateFormat: "d-m-Y",
+        minDate: "today",
+        onChange: function (selectedDates, dateStr, instance) {
+          if (selectedDates.length === 2) {
+            // Guardar las fechas en los campos ocultos
+            document.getElementById('event_start_date').value = selectedDates[0].toISOString().split('T')[0];
+            document.getElementById('event_end_date').value = selectedDates[1].toISOString().split('T')[0];
+
+            console.log("Initial date: ", $('#event_start_date').val());
+            console.log("Final date: ", $('#event_end_date').val());
+          }
+        },
+
+      });
+    })
+
+
+
+
+
+
+
+
+  </script>
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</body>
