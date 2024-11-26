@@ -12,17 +12,6 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
     apiVersion: '2024-11-20.acacia',
 });
 
-// Simulamos una reservación estática (sin conexión a MongoDB)
-/*
-const mockReservation = {
-    reservation_num: "RES123456789",
-    total: 200, // Total en USD
-    room_id: "room1",
-    user_id: "user1",
-    nNights: 3,
-};
-*/
-
 export const renderPaymentSummary = async (req: Request, res: Response) => {
     try {
         //Leer datos desde Req.body
@@ -43,16 +32,6 @@ export const renderPaymentSummary = async (req: Request, res: Response) => {
         res.json({
             redirectUrl: `/payments/summary?room_id=${room_id}&arrival_date=${arrival_date}&departure_date=${departure_date}&num_of_guests=${num_of_guests}&total=${total}`,
         });
-
-        /*
-        res.render('paymentSummary', {
-            room,
-            arrival_date,
-            departure_date,
-            num_of_guests,
-            total,
-        });
-        */
     } catch (error) {
         console.error("Error rendering payment summary", error);
         res.status(HTTP_STATUS_CODES.SERVER_ERROR).send("Error interno del servidor");
@@ -73,7 +52,7 @@ export const createCheckoutSession = async (req: Request, res: Response) => {
             line_items: [
                 {
                     price_data: {
-                        currency: "usd",
+                        currency: "mxn",
                         product_data: { name: `Reservación: ${room.name}` },
                         unit_amount: total * 100,
                     },
@@ -93,7 +72,7 @@ export const createCheckoutSession = async (req: Request, res: Response) => {
 };
 
 export const paymentSuccess = async (req: Request, res: Response) => {
-    const reservationId = req.query.reservation_id;
+    const reservationId = req.body.reservation_id;
     res.redirect(`/reservations/confirmation/${reservationId}`);
 };
 

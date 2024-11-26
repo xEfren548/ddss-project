@@ -13,6 +13,7 @@ import moment from 'moment';
 dotenv.config();
 
 // Configuración de cliente S3
+/*
 const accessKey = process.env.S3_ACCESS_KEY!;
 const secretKey = process.env.S3_SECRET_KEY!;
 const region = process.env.S3_REGION!;
@@ -25,6 +26,7 @@ const s3Client = new S3Client({
   },
   region: region,
 });
+*/
 
 class ReservationController {
   /*

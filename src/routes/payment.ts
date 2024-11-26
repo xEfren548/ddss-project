@@ -1,8 +1,9 @@
 import { Router } from "express";
 //import { createCheckoutSession, paymentCancel, paymentSuccess } from "../controller/payment.controller";
-import { createCheckoutSession, renderPaymentSummary } from "../controller/payment.controller";
-import { authenticateToken } from '../middlewares/auth';
+import { createCheckoutSession, paymentSuccess, renderPaymentSummary } from "../controller/payment.controller";
 
+import { authenticateToken } from '../middlewares/auth';
+import { reservationController } from "../controller/reservation.controller";
 
 const router = Router();
 
@@ -12,7 +13,7 @@ router.get('/', (req, res) => {
 });
 router.post("/summary", authenticateToken, renderPaymentSummary);
 
-router.get("/summary", (req, res) => {
+router.get("/summary",  (req, res) => {
     const { room_id, arrival_date, departure_date, num_of_guests, total } = req.query;
     console.log(room_id)
     res.render("paymentSummary", {
@@ -24,12 +25,10 @@ router.get("/summary", (req, res) => {
     });
 });
 
-
-
 // Ruta para crear session
-//router.post("/checkout", createCheckoutSession);
+router.post("/checkout", authenticateToken, createCheckoutSession);
 
-//router.post("/success", paymentSuccess); //si salio exitoso, Debe de rederigir a "reservationConfirmation"
+router.post("/success", reservationController.renderReservationConfirmation);
 
 //router.post("/cancel", paymentCancel);  //Si no salio exitoso la compra, debera de arrojar un error.
 
