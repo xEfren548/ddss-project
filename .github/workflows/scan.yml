@@ -12,51 +12,37 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Cache Node.js modules
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
       - name: Install dependencies
         run: npm install
 
-      - name: Install npm-audit-html
-        run: npm install -g npm-audit-html
+      - name: Install audit-ci globally
+        run: npm install -g audit-ci
 
-      - name: Run npm audit
-        run: npm audit --json > audit-report.json || true
-
-      - name: Transform audit report for HTML generation
-        run: |
-          node <<EOF
-          const fs = require('fs');
-          const report = JSON.parse(fs.readFileSync('audit-report.json', 'utf8'));
-          const transformed = {
-            advisories: Object.values(report.vulnerabilities).reduce((acc, vuln, index) => {
-              acc[index + 1] = {
-                id: index + 1,
-                title: vuln.via[0].title || vuln.name,
-                severity: vuln.severity,
-                url: vuln.via[0].url || '',
-                module_name: vuln.name,
-                vulnerable_versions: vuln.range,
-                patched_versions: vuln.fixAvailable ? `>=${vuln.range.split('<')[1]}` : 'None',
-                recommendations: vuln.fixAvailable
-                  ? `Upgrade to ${vuln.range.split('<')[1]} or later`
-                  : 'No fix available',
-              };
-              return acc;
-            }, {}),
-          };
-          fs.writeFileSync('transformed-audit-report.json', JSON.stringify(transformed, null, 2));
-          EOF
+      - name: Run audit-ci and generate JSON Report
+        run: audit-ci --json > audit-report.json || true
 
       - name: Generate HTML Report
-        run: npm-audit-html -i transformed-audit-report.json -o audit-report.html
+        run: |
+          npx json2html-cli --title "Audit Report" --input audit-report.json --output audit-report.html
 
       - name: Upload JSON Report
         uses: actions/upload-artifact@v3
         with:
-          name: npm-audit-json
+          name: audit-json-report
           path: audit-report.json
+          retention-days: 30
 
       - name: Upload HTML Report
         uses: actions/upload-artifact@v3
         with:
-          name: npm-audit-html
+          name: audit-html-report
           path: audit-report.html
+          retention-days: 30
