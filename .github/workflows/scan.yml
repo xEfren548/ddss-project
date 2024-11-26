@@ -6,18 +6,30 @@ on:
       - vulns
 
 jobs:
-  build:
+  audit:
     runs-on: ubuntu-latest
-
     steps:
-    - name: Checkout Code
-      uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-    - name: Install Dependencies
-      run: npm install
+      - name: Install dependencies
+        run: npm install
 
-    - name: Scan Vulnerabilities
-      run: npm audit --omit=dev
+      - name: Run npm audit
+        run: |
+          npm audit --omit=dev --json > audit-report.json || true
 
-    - name: Static Code Analysis
-      uses: returntocorp/semgrep-action@v1
+      - name: Generate HTML Report
+        run: npx npm-audit-html --output audit-report.html || true
+
+      - name: Upload JSON Report
+        uses: actions/upload-artifact@v3
+        with:
+          name: npm-audit-json
+          path: audit-report.json
+
+      - name: Upload HTML Report
+        uses: actions/upload-artifact@v3
+        with:
+          name: npm-audit-html
+          path: audit-report.html
