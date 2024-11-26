@@ -20,10 +20,16 @@ jobs:
 
       - name: Run npm audit
         run: |
-          npm audit --omit=dev --json > audit-report.json || true
+          npm audit --json > audit-report.json || true
 
       - name: Generate HTML Report
         run: npm audit --json | npm-audit-html
+
+      - name: Install audit-ci
+        run: npm install -g audit-ci
+
+      - name: Run audit-ci
+        run: audit-ci --json > audit-ci-report.json
 
       - name: Upload JSON Report
         uses: actions/upload-artifact@v3
