@@ -5,6 +5,7 @@ import categoryRoutes from './categories';
 import roomRoutes from './rooms';
 import loginRoutes from './login';
 import registerRoutes from './register';
+import paymentRoutes from "./payment";
 import path from "path";
 
 const router = Router();
@@ -41,5 +42,8 @@ router.use('/categories', categoryRoutes);
 
 //rooms
 router.use('/rooms', roomRoutes);
+
+//Pagos
+router.use("/payments", paymentRoutes);
 
 export default router;
