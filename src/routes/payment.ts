@@ -3,7 +3,7 @@ import { Router } from "express";
 import { createCheckoutSession, paymentSuccess, renderPaymentSummary } from "../controller/payment.controller";
 
 import { authenticateToken } from '../middlewares/auth';
-import { reservationController } from "controller/reservation.controller";
+import { reservationController } from "../controller/reservation.controller";
 
 const router = Router();
 
@@ -28,9 +28,9 @@ router.get("/summary",  (req, res) => {
 // Ruta para crear session
 router.post("/checkout", authenticateToken, createCheckoutSession);
 
-router.get("/success", paymentSuccess);
+router.get("/success/", paymentSuccess);
 
-router.get("/confirmation/:id", reservationController.renderReservationConfirmation)
+//router.get("/confirmation/:id", reservationController.renderReservationConfirmation)
 
 //router.post("/cancel", paymentCancel);  //Si no salio exitoso la compra, debera de arrojar un error.
 

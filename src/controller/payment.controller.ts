@@ -62,7 +62,7 @@ export const createCheckoutSession = async (req: Request, res: Response) => {
                 },
             ],
             mode: "payment",
-            success_url: `http://localhost:3000/payments/success`,
+            success_url: `http://localhost:3000/payments/success?room_id=${room_id}`,
             cancel_url: `http://localhost:3000/reservations/confirmation/cancel`,
         });
 
@@ -76,7 +76,7 @@ export const createCheckoutSession = async (req: Request, res: Response) => {
 export const paymentSuccess = async (req: Request, res: Response) => {
 
     try {
-        const { room_id } = req.body;
+        const { room_id } = req.query;
 
         if(!room_id) {
             return res.status(HTTP_STATUS_CODES.BAD_REQUEST).send("Falta el ID de la habitacion")
@@ -87,9 +87,6 @@ export const paymentSuccess = async (req: Request, res: Response) => {
         console.error('Error al procesar el exito del pago', error);
         res.status(HTTP_STATUS_CODES.SERVER_ERROR).send('Error interno del servidor')
     }
-
-    const reservationId = req.body.reservation_id;
-    res.redirect(`/reservations/confirmation/${reservationId}`);
 };
 
 
