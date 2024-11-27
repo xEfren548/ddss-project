@@ -15,7 +15,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
 export const renderPaymentSummary = async (req: Request, res: Response) => {
     try {
         //Leer datos desde Req.body
-        const { room_id, arrival_date, departure_date, num_of_guests, total } = req.body;
+        const { room_id, arrival_date, departure_date, num_of_guests, total, reservation_num } = req.body;
 
         //validar datos
         if (!room_id || !arrival_date || !departure_date || !num_of_guests || !total) {
@@ -30,7 +30,7 @@ export const renderPaymentSummary = async (req: Request, res: Response) => {
 
         // Redirigir al resumen del pago con los datos necesarios
         res.json({
-            redirectUrl: `/payments/summary?room_id=${room_id}&arrival_date=${arrival_date}&departure_date=${departure_date}&num_of_guests=${num_of_guests}&total=${total}`,
+            redirectUrl: `/payments/summary?room_id=${room_id}&arrival_date=${arrival_date}&departure_date=${departure_date}&num_of_guests=${num_of_guests}&total=${total}&reservation_num=${reservation_num}`,
         });
     } catch (error) {
         console.error("Error rendering payment summary", error);
@@ -40,7 +40,7 @@ export const renderPaymentSummary = async (req: Request, res: Response) => {
 
 export const createCheckoutSession = async (req: Request, res: Response) => {
     try {
-        const { total, room_id } = req.body;
+        const { total, room_id, reservation_num } = req.body;
 
         //Verificar la habitacion si existe
         const room = await Room.findOne({ room_id }).lean();
@@ -62,7 +62,7 @@ export const createCheckoutSession = async (req: Request, res: Response) => {
                 },
             ],
             mode: "payment",
-            success_url: `http://localhost:3000/payments/success?room_id=${room_id}`,
+            success_url: `http://localhost:3000/payments/success?room_id=${room_id}&reservation_num=${reservation_num}`,
             cancel_url: `http://localhost:3000/reservations/confirmation/cancel`,
         });
 
@@ -76,20 +76,18 @@ export const createCheckoutSession = async (req: Request, res: Response) => {
 export const paymentSuccess = async (req: Request, res: Response) => {
 
     try {
-        const { room_id } = req.query;
+        const { room_id, reservation_num } = req.query;
 
-        if(!room_id) {
+        if(!room_id || !reservation_num) {
             return res.status(HTTP_STATUS_CODES.BAD_REQUEST).send("Falta el ID de la habitacion")
         }
         //rederigir a la vista de confirmacion
-        res.redirect(`/reservations/confirmation/${room_id}`);
+        res.redirect(`/reservations/confirmation/${reservation_num}`);
     } catch (error){
         console.error('Error al procesar el exito del pago', error);
         res.status(HTTP_STATUS_CODES.SERVER_ERROR).send('Error interno del servidor')
     }
 };
-
-
 
 /*
 export const createCheckoutSession = async (req: Request, res: Response) => {

@@ -168,237 +168,195 @@
       </button>
     </div>
 
-    <!--
-    <div class="col-12">
-      <button
-        type="button"
-        name=""
-        id="btn-reservar"
-        class="btn btn-primary d-block"
-      >
-        Reservar
-      </button>
-    </div>
-    -->
-
-
   </div>
 
   <script src="/scripts/token.js"></script>
   <script>
-    document.addEventListener("DOMContentLoaded", async function () {
-      const userId = localStorage.getItem("user_id");
-      const token = localStorage.getItem("token");
-      console.log(userId);
+document.addEventListener("DOMContentLoaded", async function () {
+  const userId = localStorage.getItem("user_id");
+  const token = localStorage.getItem("token");
+  console.log(userId);
 
-      async function getUser() {
-        try {
-          const response = await fetch(`/users/${userId}`, {
-            method: "GET",
-            headers: {
-              Authorization: `Token ${token}`,
-            },
-          });
-          if (response.ok) {
-            const user = await response.json();
-            console.log(user);
-            return user;
-          }
-        } catch (error) {
-          console.error(error);
-          return;
-        }
-      }
-      const user = await getUser();
-      console.log(user)
-
-      document.getElementById("client-name").value = user.name;
-      document.getElementById("client-email").value = user.email;
-      document.getElementById("client-cellphone").value = user.cellphone;
-
-      const dateRangeInput = document.getElementById("date_range");
-      const nightsInput = document.getElementById("nNights");
-
-      dateRangeInput.addEventListener("change", function () {
-        const arrivalDate = document.getElementById("event_start_date");
-        const departureDate = document.getElementById("event_end_date");
-        calculateNightDifference(arrivalDate, departureDate);
-
-        const totalPriceInput = document.getElementById("total_price");
-        const pricePerNightValue = {{this.price_per_night}};
-
-        const totalPrice = pricePerNightValue * nightsInput.value;
-        totalPriceInput.value = totalPrice;
-
-      })
-
-      //Funcionalidad - Reservacion
-      const btnReservar = document.getElementById("btn-reservar");
-      btnReservar.addEventListener("click", async function (event) {
-        event.preventDefault();
-
-        if (!token) {
-            Swal.fire({
-                icon: "error",
-                title: "Usuario no autenticado",
-                text: "Por favor, inicia sesión para continuar.",
-            });
-            return;
-        }
-
-        const reservationData = {
-            room_id: '{{this.room_id}}',
-            arrival_date: document.getElementById("event_start_date").value,
-            departure_date: document.getElementById("event_end_date").value,
-            num_of_guests: document.getElementById("nHuespedes").value,
-            total: document.getElementById("total_price").value,
-        };
-        //const redirectUrl = `/payments/summary?room_id=${this.roomId}&arrival_date=${this.arrivalDate}&departure_date=${this.departureDate}&num_of_guests=${this.nHuespedes}&total=${this.total}`;
-
-        //test
-        console.log("Token recuperado desde room.handlebars:", token);
-        try {
-            const response = await fetch("/payments/summary", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Token ${token}`,
-                },
-                body: JSON.stringify(reservationData),
-            });
-
-            //test
-            console.log("Respuesta del servidor:", response);
-
-            if (response.ok) {
-                const { redirectUrl } = await response.json();
-                //test
-                console.log("Redirigiendo a:", redirectUrl);
-                window.location.href = redirectUrl;
-            } else {
-              const errorData = await response.json();
-              Swal.fire({
-                icon: "error",
-                title: "Error",
-                text: errorData.error || "Ocurrió un error.",
-              });
-            }
-        } catch (error) {
-            console.error("Error al procesar la reservación:", error);
-            Swal.fire({
-                icon: "error",
-                title: "Oops...",
-                text: "Error al procesar la reservación: " + error.message,
-            });
-        }
-      });
-
-      /*
-      const btnReservar = document.getElementById("btn-reservar");
-      btnReservar.addEventListener("click", async function (event) {
-        event.preventDefault();
-
-        const arrivalDate = document.getElementById("event_start_date");
-        const departureDate = document.getElementById("event_end_date");
-        const nHuespedes = document.getElementById("nHuespedes");
-
-        try {
-            Swal.fire({
-            title: 'Creando reserva...',
-            allowOutsideClick: false,
-            didOpen: () => {
-                Swal.showLoading();
-            }
-        });
-          const response = await fetch(`/reservations?userId=${userId}`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Token ${token}`,
-            },
-            // user_id, room_id, arrival_date, checkout_date, num_of_guest, status
-            body: JSON.stringify({
-              user_id: userId,
-              room_id: '{{this.room_id}}',
-              arrival_date: arrivalDate.value,
-              checkout_date: departureDate.value,
-              num_of_guest: nHuespedes.value,
-              total: document.getElementById("total_price").value,
-              nNights: nightsInput.value
-            }),
-          });
-
-          Swal.close();
-
-          if (!response.ok) {
-            throw new Error("Error al crear la reserva");
-          }
-
-          const data = await response.json();
-          const reservation_num = data.reservation_num;
-          window.location.href = `/reservations/confirmation/${reservation_num}`
-        } catch(error) {
-          console.error(error)
-          Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: 'Error al crear la reserva: ' + error,
-          })
-
-        }
-
-      })
-      */
-
-
-
-
-
-
-
-
-
-      function calculateNightDifference(arrivalDate, departureDate) {
-        console.log('Desde calcular noches')
-        const arrivalValue = new Date(arrivalDate.value);
-        const departureValue = new Date(departureDate.value);
-
-        // Verifica si las fechas son válidas
-        if (!isNaN(arrivalValue) && !isNaN(departureValue) && departureValue >= arrivalValue) {
-          const timeDifference = departureValue.getTime() - arrivalValue.getTime();
-          const nightDifference = Math.ceil(timeDifference / (1000 * 3600 * 24)); // Calcula la diferencia en días
-
-          nightsInput.value = nightDifference
-        } else {
-          nightsInput.value = 0
-        }
-      }
-
-      flatpickr("#date_range", {
-        mode: "range",
-        dateFormat: "d-m-Y",
-        minDate: "today",
-        onChange: function (selectedDates, dateStr, instance) {
-          if (selectedDates.length === 2) {
-            // Guardar las fechas en los campos ocultos
-            document.getElementById('event_start_date').value = selectedDates[0].toISOString().split('T')[0];
-            document.getElementById('event_end_date').value = selectedDates[1].toISOString().split('T')[0];
-
-            console.log("Initial date: ", $('#event_start_date').val());
-            console.log("Final date: ", $('#event_end_date').val());
-          }
+  async function getUser() {
+    try {
+      const response = await fetch(`/users/${userId}`, {
+        method: "GET",
+        headers: {
+          Authorization: `Token ${token}`,
         },
-
       });
-    })
+      if (response.ok) {
+        const user = await response.json();
+        console.log(user);
+        return user;
+      }
+    } catch (error) {
+      console.error(error);
+      return;
+    }
+  }
 
+  const user = await getUser();
+  console.log(user);
 
+  document.getElementById("client-name").value = user.name;
+  document.getElementById("client-email").value = user.email;
+  document.getElementById("client-cellphone").value = user.cellphone;
 
+  const dateRangeInput = document.getElementById("date_range");
+  const nightsInput = document.getElementById("nNights");
 
+  dateRangeInput.addEventListener("change", function () {
+    const arrivalDate = document.getElementById("event_start_date");
+    const departureDate = document.getElementById("event_end_date");
+    calculateNightDifference(arrivalDate, departureDate);
 
+    const totalPriceInput = document.getElementById("total_price");
+    const pricePerNightValue = {{this.price_per_night}};
 
+    const totalPrice = pricePerNightValue * nightsInput.value;
+    totalPriceInput.value = totalPrice;
+  });
 
+  async function payFunction(reservation_num) {
+    if (!token) {
+      Swal.fire({
+        icon: "error",
+        title: "Usuario no autenticado",
+        text: "Por favor, inicia sesión para continuar.",
+      });
+      return;
+    }
 
+    const reservationData = {
+      room_id: '{{this.room_id}}',
+      arrival_date: document.getElementById("event_start_date").value,
+      departure_date: document.getElementById("event_end_date").value,
+      num_of_guests: document.getElementById("nHuespedes").value,
+      total: document.getElementById("total_price").value,
+      reservation_num,
+    };
+
+    console.log("Token recuperado desde room.handlebars:", token);
+
+    try {
+      const response = await fetch("/payments/summary", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Token ${token}`,
+        },
+        body: JSON.stringify(reservationData),
+      });
+
+      console.log("Respuesta del servidor:", response);
+
+      if (response.ok) {
+        const { redirectUrl } = await response.json();
+        console.log("Redirigiendo a:", redirectUrl);
+        window.location.href = redirectUrl;
+      } else {
+        const errorData = await response.json();
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: errorData.error || "Ocurrió un error.",
+        });
+      }
+    } catch (error) {
+      console.error("Error al procesar la reservación:", error);
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Error al procesar la reservación: " + error.message,
+      });
+    }
+  }
+
+  const btnReservar = document.getElementById("btn-reservar");
+  btnReservar.addEventListener("click", async function (event) {
+    event.preventDefault();
+
+    const arrivalDate = document.getElementById("event_start_date");
+    const departureDate = document.getElementById("event_end_date");
+    const nHuespedes = document.getElementById("nHuespedes");
+
+    try {
+      Swal.fire({
+        title: 'Creando reserva...',
+        allowOutsideClick: false,
+        didOpen: () => {
+          Swal.showLoading();
+        }
+      });
+
+      const response = await fetch(`/reservations?userId=${userId}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Token ${token}`,
+        },
+        body: JSON.stringify({
+          user_id: userId,
+          room_id: '{{this.room_id}}',
+          arrival_date: arrivalDate.value,
+          checkout_date: departureDate.value,
+          num_of_guest: nHuespedes.value,
+          total: document.getElementById("total_price").value,
+          nNights: nightsInput.value,
+        }),
+      });
+
+      Swal.close();
+
+      if (!response.ok) {
+        throw new Error("Error al crear la reserva");
+      }
+
+      const data = await response.json();
+      const reservation_num = data.reservation_num;
+      //window.location.href = `/reservations/confirmation/${reservation_num}`;
+      await payFunction(reservation_num)
+    } catch (error) {
+      console.error(error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Error al crear la reserva: ' + error,
+      });
+    }
+  });
+
+  function calculateNightDifference(arrivalDate, departureDate) {
+    console.log('Desde calcular noches');
+    const arrivalValue = new Date(arrivalDate.value);
+    const departureValue = new Date(departureDate.value);
+
+    if (!isNaN(arrivalValue) && !isNaN(departureValue) && departureValue >= arrivalValue) {
+      const timeDifference = departureValue.getTime() - arrivalValue.getTime();
+      const nightDifference = Math.ceil(timeDifference / (1000 * 3600 * 24));
+
+      nightsInput.value = nightDifference;
+    } else {
+      nightsInput.value = 0;
+    }
+  }
+
+  flatpickr("#date_range", {
+    mode: "range",
+    dateFormat: "d-m-Y",
+    minDate: "today",
+    onChange: function (selectedDates, dateStr, instance) {
+      if (selectedDates.length === 2) {
+        document.getElementById('event_start_date').value = selectedDates[0].toISOString().split('T')[0];
+        document.getElementById('event_end_date').value = selectedDates[1].toISOString().split('T')[0];
+
+        console.log("Initial date: ", $('#event_start_date').val());
+        console.log("Final date: ", $('#event_end_date').val());
+      }
+    },
+  });
+});
   </script>
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>

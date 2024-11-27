@@ -4,6 +4,7 @@
 </head>
 
 <h1>Resumen del Pago</h1>
+<p>Numero de reservacion: {{reservation_num}}</p>
 <p>Fecha de llegada: {{arrival_date}}</p>
 <p>Fecha de salida: {{departure_date}}</p>
 <p>Número de huéspedes: {{num_of_guests}}</p>
@@ -24,7 +25,7 @@
                     'Content-Type': 'application/json',
                     Authorization: `Bearer ${token}`,
                 },
-                body: JSON.stringify({ total: {{ total }}, room_id: '{{room_id}}' }),
+                body: JSON.stringify({ total: {{ total }}, room_id: '{{room_id}}', reservation_num: '{{reservation_num}}' }),
             });
 
     if (!response.ok) throw new Error('Error al crear sesión de pago');

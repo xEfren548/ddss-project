@@ -14,7 +14,7 @@ router.get('/', (req, res) => {
 router.post("/summary", authenticateToken, renderPaymentSummary);
 
 router.get("/summary",  (req, res) => {
-    const { room_id, arrival_date, departure_date, num_of_guests, total } = req.query;
+    const { room_id, arrival_date, departure_date, num_of_guests, total, reservation_num } = req.query;
     console.log(room_id)
     res.render("paymentSummary", {
         room_id,
@@ -22,6 +22,7 @@ router.get("/summary",  (req, res) => {
         departure_date,
         num_of_guests,
         total,
+        reservation_num
     });
 });
 
