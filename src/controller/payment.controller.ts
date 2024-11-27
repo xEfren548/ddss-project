@@ -42,11 +42,13 @@ export const createCheckoutSession = async (req: Request, res: Response) => {
     try {
         const { total, room_id } = req.body;
 
+        //Verificar la habitacion si existe
         const room = await Room.findOne({ room_id }).lean();
         if (!room) {
             return res.status(HTTP_STATUS_CODES.NOT_FOUND).send("Habitación no encontrada");
         }
 
+        //Conexion con stripe
         const session = await stripe.checkout.sessions.create({
             payment_method_types: ["card"],
             line_items: [
@@ -60,7 +62,7 @@ export const createCheckoutSession = async (req: Request, res: Response) => {
                 },
             ],
             mode: "payment",
-            success_url: `http://localhost:3000/reservations/confirmation/success`,
+            success_url: `http://localhost:3000/payments/success`,
             cancel_url: `http://localhost:3000/reservations/confirmation/cancel`,
         });
 
@@ -72,6 +74,20 @@ export const createCheckoutSession = async (req: Request, res: Response) => {
 };
 
 export const paymentSuccess = async (req: Request, res: Response) => {
+
+    try {
+        const { room_id } = req.body;
+
+        if(!room_id) {
+            return res.status(HTTP_STATUS_CODES.BAD_REQUEST).send("Falta el ID de la habitacion")
+        }
+        //rederigir a la vista de confirmacion
+        res.redirect(`/reservations/confirmation/${room_id}`);
+    } catch (error){
+        console.error('Error al procesar el exito del pago', error);
+        res.status(HTTP_STATUS_CODES.SERVER_ERROR).send('Error interno del servidor')
+    }
+
     const reservationId = req.body.reservation_id;
     res.redirect(`/reservations/confirmation/${reservationId}`);
 };

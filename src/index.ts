@@ -13,7 +13,7 @@ import router from './routes'
 //Importar swagger
 import swaggerJSDoc from 'swagger-jsdoc';
 import { serve, setup } from 'swagger-ui-express';
-import swaggerConfig from './../swagger.config.json';
+//import swaggerConfig from './../swagger.config.json';
 
 //Cargar variables de entorno
 dotenv.config();
@@ -51,8 +51,8 @@ app.engine('handlebars', engine({helpers}));
 app.set('view engine', 'handlebars');
 
 //Conexion a Swagger
-const swaggerDocs = swaggerJSDoc(swaggerConfig);
-app.use('/swagger', serve, setup(swaggerDocs));
+//const swaggerDocs = swaggerJSDoc(swaggerConfig);
+//app.use('/swagger', serve, setup(swaggerDocs));
 
 //Conexion de MongoDB
 mongoose.connect(dbUrl as string)

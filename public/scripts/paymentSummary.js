@@ -1,3 +1,4 @@
+/*
 const btnPagar = document.getElementById("btn-proceder-pago");
 btnPagar.addEventListener("click", async function () {
     try {
@@ -16,3 +17,4 @@ btnPagar.addEventListener("click", async function () {
         console.error("Error al iniciar el pago", error);
     }
 });
+*/

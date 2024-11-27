@@ -54,6 +54,26 @@ class ReservationController {
     }
   }
 
+
+  async renderReservationConfirmation(req: Request, res:Response) {
+    try {
+      const room_id = req.params["id"];
+
+      const room = await Room.findOne({room_id}).lean();
+      if(!room) {
+        return res
+          .status(HTTP_STATUS_CODES.NOT_FOUND)
+          .json({ message: "No se encontró la habitación" });
+      }
+
+      res.render('reservationConfirmation', { room });
+    } catch(error) {
+      console.log("Error:", error);
+      res.status(HTTP_STATUS_CODES.SERVER_ERROR).json({ message: "Error al obtener la habitación"})
+    }
+  }
+
+  /*
   async renderReservationConfirmation(req: Request, res: Response) {
     try {
       const reservation = await Reservation.findOne({reservation_num: req.params["id"],}).lean();
@@ -75,6 +95,7 @@ class ReservationController {
         .json({ message: "Error al obtener la reserva", error });
     }
   }
+    */
 
   //GET | ReservationById
   async getReservationById(req: Request, res: Response) {
