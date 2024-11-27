@@ -62,8 +62,8 @@ export const createCheckoutSession = async (req: Request, res: Response) => {
                 },
             ],
             mode: "payment",
-            success_url: `http://localhost:3000/payments/success?room_id=${room_id}&reservation_num=${reservation_num}`,
-            cancel_url: `http://localhost:3000/reservations/confirmation/cancel`,
+            success_url: `http://54.85.77.153:3000/payments/success?room_id=${room_id}&reservation_num=${reservation_num}`,
+            cancel_url: `http://54.85.77.153:3000/reservations/confirmation/cancel`,
         });
 
         res.json({ id: session.id });
