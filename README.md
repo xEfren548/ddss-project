@@ -7,7 +7,7 @@ El objetivo principal es crear una plataforma sencilla de utilizar para consulta
 
 - Victor Manuel Tellez Amezcua
 - Jose Santiago Oseguera García
-- Rodrigo López Coronado
+- ALVAREZ MANCILLA, JESUS EFREN
 
 # Instrucciones para ejecutar el proyecto
 
