@@ -11,8 +11,9 @@ export interface AuthUserPayload extends JwtPayload {
 // Extiende la interfaz Request
 declare global {
     namespace Express {
+        interface User extends AuthUserPayload {} // This aligns with @types/passport's User type
         interface Request {
-            user?: AuthUserPayload; // Añade la propiedad user
+            user?: User; // Reuse the global User type for compatibility
         }
     }
 }
