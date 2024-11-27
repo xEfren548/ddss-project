@@ -57,16 +57,27 @@ class ReservationController {
 
   async renderReservationConfirmation(req: Request, res:Response) {
     try {
-      const room_id = req.params["id"];
+      // const room_id = req.params["id"];
+      const reservation_num = req.params["id"];
 
-      const room = await Room.findOne({room_id}).lean();
+      const reservation = await Reservation.findOne({reservation_num}).lean();
+      if(!reservation) {
+        return res
+          .status(HTTP_STATUS_CODES.NOT_FOUND)
+          .json({ message: "No se encontró la reserva" });
+      }
+
+      const formattedArrivalDate = moment.utc(reservation.arrival_date).format('DD-MM-YYYY');  
+      const formattedCheckoutDate = moment.utc(reservation.checkout_date).format('DD-MM-YYYY');
+
+      const room = await Room.findOne({room_id: reservation.room_id}).lean();
       if(!room) {
         return res
           .status(HTTP_STATUS_CODES.NOT_FOUND)
           .json({ message: "No se encontró la habitación" });
       }
 
-      res.render('reservationConfirmation', { room });
+      res.render("reservationConfirmation", { reservation: {...reservation, formattedArrivalDate, formattedCheckoutDate}, room });
     } catch(error) {
       console.log("Error:", error);
       res.status(HTTP_STATUS_CODES.SERVER_ERROR).json({ message: "Error al obtener la habitación"})
