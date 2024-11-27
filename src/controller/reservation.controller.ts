@@ -123,9 +123,33 @@ class ReservationController {
     const { id } = req.params;
 
     try {
-      const reservation = await Reservation.find({
-        user_id: id,
-      }).populate("room_id", "category_id");
+      const reservation = await Reservation.aggregate([
+        {
+          $match: { user_id: new mongoose.Types.ObjectId(id) }
+        },
+        {
+          $lookup: {
+            from: "users",
+            localField: "user_id",
+            foreignField: "user_id",
+            as: "user"
+          }
+        },
+        {
+          $unwind: "$user"
+        },
+        {
+          $lookup: {
+            from: "rooms",
+            localField: "room_id",
+            foreignField: "room_id",
+            as: "room"
+          }
+        },
+        {
+          $unwind: "$room"
+        }
+      ])
       if (!reservation) {
         res
           .status(HTTP_STATUS_CODES.NOT_FOUND)
