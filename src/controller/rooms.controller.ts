@@ -3,7 +3,6 @@ import Room from "../models/room";
 import { HTTP_STATUS_CODES } from "../types/http-status-codes";
 import Category from "../models/category";
 import mongoose from "mongoose";
-import mongoose from "mongoose";
 
 class RoomsController {
   async getAll(req: Request, res: Response) {
@@ -20,20 +19,7 @@ class RoomsController {
         { 
           $unwind: "$category"
         }
-      ]);      
-      const rooms = await Room.aggregate([
-        {
-          $lookup: {
-            from: "categories",
-            localField: "category_id",
-            foreignField: "category_id",
-            as: "category"
-          }
-        },
-        { 
-          $unwind: "$category"
-        }
-      ]);      
+      ]);       
       console.log(rooms)
       const acceptHeader = req.headers.accept || "";
       if (acceptHeader.includes("application/json")) {
@@ -57,22 +43,6 @@ class RoomsController {
   async getRoomByID(req: Request, res: Response) {
     try {
       const room_id = req.params["room_id"];
-      const room = await Room.aggregate([
-        {
-          $match: { room_id: new mongoose.Types.ObjectId(room_id) }
-        },
-        {
-          $lookup: {
-            from: "categories",
-            localField: "category_id",
-            foreignField: "category_id",
-            as: "category"
-          }
-        },
-        { 
-          $unwind: "$category"
-        }
-      ]);
       const room = await Room.aggregate([
         {
           $match: { room_id: new mongoose.Types.ObjectId(room_id) }
