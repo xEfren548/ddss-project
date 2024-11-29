@@ -36,3 +36,20 @@ jobs:
         with:
           name: npm-audit-html
           path: npm-audit.html
+
+      # Add OWASP Dependency-Check step
+      - name: Install OWASP Dependency-Check
+        run: |
+          wget https://github.com/jeremydmiller/owasp-dependency-check-action/releases/download/v1.0.0/owasp-dependency-check-6.1.0-release.zip
+          unzip owasp-dependency-check-6.1.0-release.zip
+          chmod +x owasp-dependency-check-6.1.0/bin/dependency-check.sh
+
+      - name: Run OWASP Dependency-Check
+        run: |
+          ./owasp-dependency-check-6.1.0/bin/dependency-check.sh --project "NodeJS Project" --scan . --format "HTML" --out ./
+      
+      - name: Upload OWASP Dependency-Check Report (HTML)
+        uses: actions/upload-artifact@v3
+        with:
+          name: owasp-dependency-check-html
+          path: ./dependency-check-report.html
