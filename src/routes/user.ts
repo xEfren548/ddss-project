@@ -71,44 +71,8 @@ router.get('/profile/:id', usersController.getRenderUserById)
 //Ruta para crear un nuevo usuario | Permisos [Todos]
 router.post('/', authenticateToken, usersController.createUser);
 
-/**
- * @swagger
- * /users{email}:
- *  put:
- *      tags: [Users]
- *      description: update user
- *      requestBody:
- *          required: true
- *          content: 
- *              application/json:
- *                  schema:
- *                      $ref: '#/components/schemas/User'
- *      responses:
- *          200:
- *              description: user updated
- *          404:
- *              description: user not found
- *          500:
- *              description: server error
- */
-
 //Ruta para actualizar info del usuario | Permisos [Admin, Gerente]
 router.put('/:id', authenticateToken, authorizaRole(['Admin', 'Gerente']), usersController.updateUser);
-
-/**
- * @swagger
- * /users{email}:
- *  delete:
- *      tags: [Users]
- *      description: delete user
- *      responses:
- *          200:
- *              description: user deleted
- *          404:
- *              description: user not found
- *          500:
- *              description: server error
- */
 
 //Ruta para eliminar un usuario | Permisos [Admin]
 router.delete('/:id', authenticateToken, authorizaRole(['Admin']), usersController.deleteUser);

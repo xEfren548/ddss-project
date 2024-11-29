@@ -1,0 +1,40 @@
+<head>
+    <title>TiesoInn - Pagar</title>
+        <link rel="stylesheet" href="/styles/payment.css">
+</head>
+
+<h1>Resumen del Pago</h1>
+<p>Numero de reservacion: {{reservation_num}}</p>
+<p>Fecha de llegada: {{arrival_date}}</p>
+<p>Fecha de salida: {{departure_date}}</p>
+<p>Número de huéspedes: {{num_of_guests}}</p>
+<p>Total: ${{total}}</p>
+
+<button id="btn-proceder-pago" class="btn btn-success">Proceder al Pago</button>
+
+<!-- imoortar script-->
+<script src="https://js.stripe.com/v3/"></script>
+<script>
+    const token = localStorage.getItem('token')
+    document.getElementById("btn-proceder-pago").addEventListener("click", async function () {
+        try {
+            const response = await fetch('/payments/checkout', {
+                method: 'POST',
+                headers:
+                {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify({ total: {{ total }}, room_id: '{{room_id}}', reservation_num: '{{reservation_num}}' }),
+            });
+
+    if (!response.ok) throw new Error('Error al crear sesión de pago');
+
+    const data = await response.json();
+    const stripe = Stripe('pk_test_51QNG7TA2NCz2jEORg5IJYdSWa4vA0gpd0HH4JonC4W0FsZ8QuTU9eKOs73JZVhEUPOU2p70QAR4QlS6cfsTwiSMC007dm25kF2');
+    stripe.redirectToCheckout({ sessionId: data.id });
+    } catch (error) {
+        console.error("Error al iniciar el pago", error);
+    }
+});
+</script>

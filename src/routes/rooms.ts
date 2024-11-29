@@ -7,19 +7,6 @@ import { authorizaRole } from '../middlewares/permissions';
 
 const router = Router();
 
-/**
- * @swagger
- * /rooms:
- *  get:
- *      tags: [Rooms]
- *      description: get all rooms
- *      responses:
- *          200:
- *              description: array of rooms
- *          500:
- *              description: server error
- */
-
 //Obtener todas las habitaciones | Permisos [Todos]
 router.get('', roomsController.getAll);
 
@@ -67,48 +54,12 @@ router.get('/:room_id', roomsController.getRoomByID);
  */
 
 //Crear una habitacion | Permisos [Gerente]
-router.post('',  authenticateToken, authorizaRole(['Gerente']), roomsController.createRoom);
-
-/**
- * @swagger
- * /rooms{room_id}:
- *  put:
- *      tags: [Rooms]
- *      description: update room
- *      requestBody:
- *          required: true
- *          content: 
- *              application/json:
- *                  schema:
- *                      $ref: '#/components/schemas/Room'
- *      responses:
- *          200:
- *              description: room updated
- *          404:
- *              description: room not found
- *          500:
- *              description: server error
- */
+router.post('', authenticateToken, authorizaRole(['Gerente']), roomsController.createRoom);
 
 //Actualizar una habitacion | Permisos [Gerente]
-router.put('/:room_id',  authenticateToken, authorizaRole(['Gerente']), roomsController.updateRoom);
-
-/**
- * @swagger
- * /room{room_id}:
- *  delete:
- *      tags: [Rooms]
- *      description: delete room
- *      responses:
- *          200:
- *              description: room deleted
- *          404:
- *              description: room not found
- *          500:
- *              description: server error
- */
+router.put('/:room_id', authenticateToken, authorizaRole(['Gerente']), roomsController.updateRoom);
 
 //Eliminar una habitacion | Permisos [Gerente]
-router.delete('/:room_id',  authenticateToken, authorizaRole(['Gerente']), roomsController.deteleRoom);
+router.delete('/:room_id', authenticateToken, authorizaRole(['Gerente']), roomsController.deteleRoom);
 
 export default router;
