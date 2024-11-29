@@ -1,22 +1,27 @@
 name: DevSecOps Pipeline
-#
+
 on:
   push:
     branches:
       - vulns
 
 jobs:
-  audit:
+  build-and-audit:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Install dependencies
-        run: npm install
-    
-      - name: Install npm-audit-html
-        run: npm install -g npm-audit-html@latest
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install Dependencies
+        run: |
+          npm install
+          npm install --save-dev @types/node @types/express @types/mongoose @types/stripe
+          npm install -g npm-audit-html@latest
 
       - name: Run npm audit
         run: |
@@ -24,6 +29,9 @@ jobs:
 
       - name: Generate HTML Report
         run: npm audit --json | npm-audit-html
+
+      - name: Build Project
+        run: npm run build
 
       - name: Upload JSON Report
         uses: actions/upload-artifact@v3
