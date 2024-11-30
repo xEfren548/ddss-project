@@ -9,6 +9,7 @@
         "module": "NodeNext",
         "resolveJsonModule": true,
         "strict": true,
-        "baseUrl": "./src"
+        "baseUrl": "./src",
+        "skipLibCheck": true
     }
 }
