@@ -51,11 +51,13 @@ jobs:
           wget https://github.com/jeremylong/DependencyCheck/releases/download/v11.1.0/dependency-check-11.1.0-release.zip
 
           unzip dependency-check-11.1.0-release.zip
+          pwd
           chmod +x dependency-check-11.1.0-release/dependency-check/bin/dependency-check.sh
 
       - name: Run OWASP Dependency-Check
         run: |
-          ./dependency-check-11.1.0-release/dependency-check/bin/dependency-check.sh --project "NodeJS Project" --scan . --format "HTML" --out ./
+          pwd
+          ./dependency-check/bin/dependency-check.sh --project "NodeJS Project" --scan . --format "HTML" --out ./
       
       - name: Upload OWASP Dependency-Check Report (HTML)
         uses: actions/upload-artifact@v3
