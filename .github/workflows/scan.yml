@@ -52,7 +52,7 @@ jobs:
 
           unzip dependency-check-11.1.0-release.zip
           ls -l
-          chmod +x dependency-check-11.1.0-release.zip/dependency-check/bin/dependency-check.sh
+          chmod +x dependency-check/bin/dependency-check.sh
 
       - name: Run OWASP Dependency-Check
         run: |
